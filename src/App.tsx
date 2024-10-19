@@ -1,4 +1,4 @@
-import { Comp1 } from "./components/ui/Comp1/Comp1"
+import { Comp1 } from "./components/Comp1"
 
 
 function App() {
