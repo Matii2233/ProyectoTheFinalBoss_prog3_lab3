@@ -64,3 +64,70 @@
     height: 100vh;
     border: 1px solid white;
 }
+
+.containerAgregarimagen {
+    background-color: #006284;
+    width: 324px;
+    height: 100px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.containerButton {
+    width: 324px;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.containerButton button {
+    padding: 4px;
+    width: 100px;
+    border: none;
+    color: white;
+    border-radius: 5px;
+}
+
+.modalContainer {
+    width: 100%;
+    background-color: #08192D;
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+    max-width: 600px;
+    max-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;    
+    align-items: center;
+    gap: 1rem;
+}
+
+.modalContainer h2 {
+    width: 324px;
+    text-align: center;
+    font-size: 24px;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid white;
+    margin-bottom: 1rem;
+}
+
+.modalContainer input {
+    width: 324px;
+    color: white;
+    background-color: #006284;
+    border: none;
+    padding: 0.4rem 0.4rem 0.4rem 0.9rem;
+}
+
+.modalContainer input::placeholder {
+    color: #EAEAEA;
+    opacity: 1;
+}
+
+.modalContainer input:focus {
+    outline: none
+}
