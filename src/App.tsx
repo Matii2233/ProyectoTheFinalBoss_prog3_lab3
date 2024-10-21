@@ -1,11 +1,11 @@
-import { Comp1 } from "./components/Comp1"
+import { Home } from "./components/screens/Home/Home"
 
 
 function App() {
 
   return (
     <>
-      <Comp1 />
+      <Home/>
     </>
   )
 }
