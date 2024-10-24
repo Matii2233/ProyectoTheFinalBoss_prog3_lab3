@@ -1,94 +1,85 @@
-import { useState } from 'react';
-import Modal from '../../ui/Modal';
 import styles from './Home.module.css';
-import { IEmpresa } from '../../../types/IEmpresa';
 import { useForm } from '../../hooks/useForm/UseForm';
+import { Modal } from 'react-bootstrap';
 
 export const Home = () => {
-    // Estado de empresas
-    const [empresas, setEmpresa] = useState<IEmpresa[]>([]);
 
-    // Estado del modal crear empresa
-    const [isOpenModal, setIsOpenModal] = useState(false);
+    const { values,isOpenModal,imagePreviewUrl,selectedImage,editingIndex,empresas,isModalViewOpen
+        ,handleCloseModalView,handleChange,handleOpenModal,setEmpresa,handleCloseModal, handleOpenModalView
+        ,handleImageChange } = useForm({ nombre: '', razonSocial: '', cuit: '' });
 
-    // Estado del logo de la empresa
-    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+    const { nombre, razonSocial, cuit } = values
 
-    // Estado para el URL de la imagen
-    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
-
-    const { values, handleChange, handleSubmitForm } = useForm({ nombre: '', razonSocial: '', cuit: '' });
-
-    const { nombre, razonSocial, cuit } = values;
-
-    const handleOpenModal = () => {
-        setIsOpenModal(true);
-    };
-
-    const handleCloseModal = () => {
-        setIsOpenModal(false);
-        setSelectedImage(null);
-        setImagePreviewUrl(null); // Reinicia la vista previa al cerrar
-    };
-
-    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            setSelectedImage(file);
-            setImagePreviewUrl(URL.createObjectURL(file)); // Crea la URL de la imagen
-        }
-    };
-
+    // Al enviar el formulario se guardan todos los valores de los inputs en el estado empresas y luego se cierra el modal
+    // Con ayuda del estado editingIndex se sabe si se debe crear una nueva empresa o reemplazarse al momento de modificarla
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
+
         if (selectedImage) {
-            // Aquí puedes manejar el envío de los datos, incluyendo la imagen
-            // Ejemplo: agregar la empresa a la lista
-            setEmpresa(prev => [...prev, { nombre, razonSocial, cuit, logo: selectedImage }]);
-            handleCloseModal(); // Cierra el modal después de enviar
+            if (editingIndex !== null) {
+                
+                setEmpresa(prev => {
+                    const updatedEmpresas = [...prev];
+                    updatedEmpresas[editingIndex] = { nombre, razonSocial, cuit, logo: selectedImage };
+                    return updatedEmpresas;
+                });
+            } else {
+                
+                setEmpresa(prev => [...prev, { nombre, razonSocial, cuit, logo: selectedImage }]);
+            }
+
+            handleCloseModal()
         }
-    };
+    }
+
 
     return (
         <>
             <div className={styles.containerView}>
+
+                {/* ASIDE DE HOME */}
                 <aside className={styles.asideContainer}>
                     <div>
                         <h1 style={{ fontSize: '1.8rem' }}>Empresas</h1>
                     </div>
                     <div>
-                        <button onClick={handleOpenModal}>Agregar Empresa</button>
+                        <button onClick={() => handleOpenModal()}>Agregar Empresa</button>
                     </div>
-                    <div className={styles.empresaContainer}>
+                    <div className={styles.empresasContainer} >
                         {empresas.map((empresa, index) => (
-                            <div key={index}>
+                            <div key={index} className={styles.tarjetaEmpresaContainer} >
                                 <h3>{empresa.nombre}</h3>
-                                <p>{empresa.razonSocial}</p>
-                                <p>{empresa.cuit}</p>
-                                {empresa.logo && (
-                                    <img
-                                        src={URL.createObjectURL(empresa.logo)}
-                                        alt="Logo"
-                                        style={{ maxWidth: '100px', maxHeight: '100px', objectFit: 'cover' }}
-                                    />
-                                )}
+
+                                <div className={styles.iconsContainer}  >
+                                    <span style={{ scale: '1.2' }} className="material-symbols-outlined" onClick={() => { handleOpenModal(index) }}>edit</span>
+                                    <span style={{ scale: '1.2' }} className="material-symbols-outlined" onClick={() => { handleOpenModalView(index) }}>visibility</span>
+                                </div>
                             </div>
                         ))}
                     </div>
                 </aside>
 
+
+                {/* MAIN DE HOME */}
                 <div className={styles.mainContainer}>
                     <div className={styles.containerButtonSucursal}>
-                        <button onClick={handleOpenModal}>Agregar Sucursal</button>
+                        <button>Agregar Sucursal</button>
                     </div>
-                    <div className={styles.containerSucursales}></div>
+
+                    <div className={styles.containerSucursales}>
+
+                    </div>
                 </div>
             </div>
 
-            {isOpenModal && (
+
+            
+            {
+            /* APARECE EL POPUP SI 'isOpenModal' ES 'true' */
+            isOpenModal && (
                 <Modal>
-                    <form onSubmit={handleSubmit} className={styles.modalContainer} >
-                        <h2>CREAR UNA EMPRESA</h2>
+                    <form onSubmit={handleSubmit} className={styles.modalContainer}>
+                        <h2>{editingIndex !== null ? 'EDITAR EMPRESA' : 'CREAR UNA EMPRESA'}</h2>
                         <input
                             name='nombre'
                             type="text"
@@ -96,7 +87,6 @@ export const Home = () => {
                             value={nombre}
                             onChange={handleChange}
                             required
-
                         />
                         <input
                             name='razonSocial'
@@ -116,7 +106,7 @@ export const Home = () => {
                         />
 
                         <div className={styles.containerAgregarimagen}>
-                        <input
+                            <input
                                 type="file"
                                 accept="image/*"
                                 onChange={handleImageChange}
@@ -124,18 +114,17 @@ export const Home = () => {
                                 style={{ display: 'none' }} // Oculta el input
                                 required
                             />
-                            {/* Botón personalizado */}
                             <label htmlFor="file-upload" className={styles.customFileUpload}>
                                 Seleccionar imagen
                             </label>
                             {selectedImage ? (
                                 <img
-                                src={imagePreviewUrl!}
-                                alt="Vista previa"
-                                style={{ maxWidth: '90%', maxHeight: '90%', objectFit: 'cover' }}
-                            />
+                                    src={imagePreviewUrl!}
+                                    alt="Vista previa"
+                                    style={{ maxWidth: '90%', maxHeight: '90%', objectFit: 'cover' }}
+                                />
                             ) : (
-                                <span className="material-symbols-outlined" style={{scale:'3.8'}} >no_photography</span>
+                                <span className="material-symbols-outlined" style={{ scale: '3.8' }}>no_photography</span>
                             )}
                         </div>
 
@@ -144,6 +133,27 @@ export const Home = () => {
                             <button style={{ backgroundColor: '#26E200' }} type='submit'>Confirmar</button>
                         </div>
                     </form>
+                </Modal>
+            )}
+
+            {
+            /* APARECE EL POPUP DE VER EMPRESA SI 'isModalViewOpen' ES 'true' */
+            isModalViewOpen && (
+                <Modal>
+                    <div className={styles.modalVerEmpresa}>
+                        <h2>EMPRESA</h2>
+                        <div style={{width:'80%'}}>
+                            <h3>{nombre}</h3>
+                            <h3>{razonSocial}</h3>
+                            <h3>{cuit}</h3>
+                        </div>
+                        <div className={styles.logoContainer}>
+                            <h3>Logo:</h3>
+                            {imagePreviewUrl && (<img src={imagePreviewUrl}/>)}
+                        </div>
+                        
+                        <button onClick={handleCloseModalView} >Cerrar</button>
+                    </div>
                 </Modal>
             )}
         </>
