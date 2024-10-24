@@ -1,6 +1,7 @@
 import styles from './Home.module.css';
 import { useForm } from '../../hooks/useForm/UseForm';
-import { Modal } from 'react-bootstrap';
+import Modal from '../../ui/Modal/Modal';
+
 
 export const Home = () => {
 
