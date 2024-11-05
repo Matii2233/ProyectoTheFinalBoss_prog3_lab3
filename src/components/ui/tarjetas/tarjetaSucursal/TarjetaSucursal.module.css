@@ -1,0 +1,54 @@
+.containerSucursales {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    max-height:83vh;
+    overflow-y:auto;
+    scrollbar-width: none;
+    gap: 10vh;
+}
+.contenedorTarjetaSucursal{
+    width: 200px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+}
+.headerTarjetaSucursal{
+    background-color: #08192D ;
+    color: white;
+    flex: 0 0 30%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+.bodyTarjetaSucursal{
+    background-color: #CAEDF1;
+    flex:1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+.contenedorImagenTarjetaSucursal{
+    height: 150px;
+    width: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.bodyTarjetaSucursal img{
+    max-width: 100%;
+    max-height: 100%;
+}
+.contenedorBotonesTarjetaSucursal{
+    width:70%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}

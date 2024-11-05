@@ -1,0 +1,21 @@
+.error {
+    color: red;
+}
+.input-formulario{
+    display: flex!important;
+    align-items: center!important;
+    background-color: #006284!important;
+    border: none!important;
+    color: white!important;
+}
+.input-formulario::placeholder{
+    color: white!important;
+}
+.input-formulario:focus{
+    background-color: #006284!important;
+    border: none!important;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+}

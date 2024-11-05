@@ -1,0 +1,50 @@
+.modalHeader{
+    background-color: #08192D !important; 
+    color: white !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-bottom: none !important;
+    position: relative !important;
+}
+.modalHeader::after {
+    content: '' !important;
+    display: block!important;
+    height: 2px; /* Grosor de la línea */
+    background-color: white!important; /* Color de la línea */
+    width: 80%!important; /* Largo de la línea (ajusta según necesites) */
+    position: absolute!important;
+    left: 50%!important; /* Centrar la línea */
+    bottom: 0!important; /* Posición en la parte inferior del header */
+    transform: translateX(-50%)!important; /* Centrar horizontalmente */
+}
+.modalBody{
+    background-color: #08192D!important;
+    color: white!important;
+    padding: 25px!important;
+}
+.modalBody img{
+    max-width: 150px!important;
+    max-height: 150px!important;
+}
+.modalFooter{
+    background-color: #08192D!important;
+    color: white!important;
+    border-top: none!important; 
+    display: flex!important;
+    justify-content: center!important;
+    align-items: center!important;
+}
+.modalFooter button{
+    color: white!important;
+    background-color: transparent!important;
+    border: 1px solid white!important;
+    border-radius: 5px!important;
+    font-size: 20px!important;
+    padding: 0px 20px 0px 20px!important;
+    transition: transform 0.3s ease!important;
+    display: inline-block!important;
+}
+.modalFooter button:hover{
+    transform: scale(1.1)!important;
+}
