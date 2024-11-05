@@ -263,7 +263,7 @@ export const ModalCrearSucursal: FC<IModalSucursal> = ({ openModal, setOpenModal
                                                 name="nombre"
                                                 type="text"
                                                 placeholder="Ingrese el nombre de la sucursal"
-                                                customWidth="45vh"
+                                                customWidth="300px"
                                             />
                                             <div className={styles.containerTimeInput}>
                                                 <input
@@ -357,13 +357,13 @@ export const ModalCrearSucursal: FC<IModalSucursal> = ({ openModal, setOpenModal
                                                 name="latitud"
                                                 type="number"
                                                 placeholder="Latitud"
-                                                customWidth="45vh"
+                                                customWidth="300px"
                                             />
                                             <TextFieldValue
                                                 name="longitud"
                                                 type="number"
                                                 placeholder="Longitud"
-                                                customWidth="45vh"
+                                                customWidth="300px"
                                             />
                                         </div>
                                         <div className={styles.containerFormModalDerecha}>
@@ -371,31 +371,31 @@ export const ModalCrearSucursal: FC<IModalSucursal> = ({ openModal, setOpenModal
                                                 name="domicilio.calle"
                                                 type="text"
                                                 placeholder="Nombre de la calle"
-                                                customWidth="45vh"
+                                                customWidth="300px"
                                             />
                                             <TextFieldValue
                                                 name="domicilio.numero"
                                                 type="number"
                                                 placeholder="Número de la calle"
-                                                customWidth="45vh"
+                                                customWidth="300px"
                                             />
                                             <TextFieldValue
                                                 name="domicilio.cp"
                                                 type="number"
                                                 placeholder="Código postal"
-                                                customWidth="45vh"
+                                                customWidth="300px"
                                             />
                                             <TextFieldValue
                                                 name="domicilio.piso"
                                                 type="number"
                                                 placeholder="Ingrese un número de piso"
-                                                customWidth="45vh"
+                                                customWidth="300px"
                                             />
                                             <TextFieldValue
                                                 name="domicilio.nroDpto"
                                                 type="number"
                                                 placeholder="Ingrese un número de departamento"
-                                                customWidth="45vh"
+                                                customWidth="300px"
                                             />
                                         </div>
                                     </div>

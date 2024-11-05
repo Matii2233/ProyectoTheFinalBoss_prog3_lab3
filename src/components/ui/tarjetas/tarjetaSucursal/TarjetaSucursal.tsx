@@ -54,7 +54,7 @@ export const TarjetaSucursal = () => {
                 <div key={index} className={styles.contenedorTarjetaSucursal}>
                     <div className={styles.headerTarjetaSucursal}>
                         <h3 style={{ fontSize: "18px" }}>{sucursal.nombre}</h3>
-                        <h4 style={{ fontSize: "18px" }}>{sucursal.horarioApertura} - {sucursal.horarioCierre}</h4>
+                        <h4 style={{ fontSize: "18px" }}>{sucursal.horarioApertura.substring(0, 5)} - {sucursal.horarioCierre.substring(0, 5)}</h4>
                     </div>
                     <div className={styles.bodyTarjetaSucursal}>
                         <div className={styles.contenedorImagenTarjetaSucursal}>
