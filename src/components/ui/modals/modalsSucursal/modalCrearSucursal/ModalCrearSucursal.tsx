@@ -30,6 +30,9 @@ interface IModalSucursal {
 }
 
 export const ModalCrearSucursal: FC<IModalSucursal> = ({ openModal, setOpenModal }: IModalSucursal) => {
+
+    const [image, setImage] = useState<string | null>(null) // Imagen manejada como string
+
     const empresaActive = useAppSelector(
         (state) => state.empresaReducer.empresaActive
     );
@@ -220,6 +223,7 @@ export const ModalCrearSucursal: FC<IModalSucursal> = ({ openModal, setOpenModal
                             : initialValues}
                         enableReinitialize={true}
                         onSubmit={async (values: ICreateSucursal) => {
+                            const sucursalService = new SucursalService(API_URL + "/sucursales");
                             if (sucursalActive) {
                                 const updateValues: IUpdateSucursal = {
                                     id: sucursalActive.id,
@@ -243,10 +247,8 @@ export const ModalCrearSucursal: FC<IModalSucursal> = ({ openModal, setOpenModal
                                     horarioApertura: values.horarioApertura,
                                     horarioCierre: values.horarioCierre,
                                 }
-                                const sucursalService = new SucursalService(API_URL + "/sucursales");
                                 await sucursalService.put(sucursalActive.id, updateValues);
                             } else {
-                                const sucursalService = new SucursalService(API_URL + "/sucursales");
                                 await sucursalService.post(values);
                             }
                             dispatch(removeSucursalActive())
@@ -254,172 +256,170 @@ export const ModalCrearSucursal: FC<IModalSucursal> = ({ openModal, setOpenModal
                             handleClose();
                         }}
                     >
-                        {
-                            ({ values, setFieldValue }) => (
-                                <Form autoComplete="off" style={{ display: "flex", flexDirection: "column", gap: "5vh" }}>
-                                    <div className={styles.containerFormModal}>
-                                        <div className={styles.containerFormModalIzquierda}>
-                                            <TextFieldValue
-                                                name="nombre"
-                                                type="text"
-                                                placeholder="Ingrese el nombre de la sucursal"
-                                                customWidth="300px"
+                        {({ values, setFieldValue }) => (
+                            <Form autoComplete="off" style={{ display: "flex", flexDirection: "column", gap: "5vh" }}>
+                                <div className={styles.containerFormModal}>
+                                    <div className={styles.containerFormModalIzquierda}>
+                                        <TextFieldValue
+                                            name="nombre"
+                                            type="text"
+                                            placeholder="Ingrese el nombre de la sucursal"
+                                            customWidth="300px"
+                                        />
+                                        <div className={styles.containerTimeInput}>
+                                            <input
+                                                className={styles.timeInput}
+                                                type="time"
+                                                name="horarioDeApertura"
+                                                value={horarioDeApertura}
+                                                onChange={(event) => {
+                                                    setHorarioDeApertura(event.target.value);
+                                                    setFieldValue("horarioApertura", `${event.target.value}:00`);
+                                                }}
                                             />
-                                            <div className={styles.containerTimeInput}>
-                                                <input
-                                                    className={styles.timeInput}
-                                                    type="time"
-                                                    name="horarioDeApertura"
-                                                    value={horarioDeApertura}
-                                                    onChange={(event) => {
-                                                        setHorarioDeApertura(event.target.value);
-                                                        setFieldValue("horarioApertura", `${event.target.value}:00`);
-                                                    }}
-                                                />
-                                                <input
-                                                    className={styles.timeInput}
-                                                    type="time"
-                                                    name="horarioDeCierre"
-                                                    value={horarioDeCierre}
-                                                    onChange={(event) => {
-                                                        setHorarioDeCierre(event.target.value);
-                                                        setFieldValue("horarioCierre", `${event.target.value}:00`);
-                                                    }}
-                                                />
-                                            </div>
+                                            <input
+                                                className={styles.timeInput}
+                                                type="time"
+                                                name="horarioDeCierre"
+                                                value={horarioDeCierre}
+                                                onChange={(event) => {
+                                                    setHorarioDeCierre(event.target.value);
+                                                    setFieldValue("horarioCierre", `${event.target.value}:00`);
+                                                }}
+                                            />
+                                        </div>
 
-                                            <div className={styles.containerCheckBox}>
-                                                <input
-                                                    type="checkbox"
-                                                    name="esCasaMatriz"
-                                                    checked={values.esCasaMatriz}
-                                                    onChange={() => setFieldValue("esCasaMatriz", !values.esCasaMatriz)}
-                                                    id="casaMatriz"
-                                                    style={{ accentColor: "#006284", scale: "1.5" }}
-                                                />
-                                                <label htmlFor="casaMatriz">Casa Matriz</label>
-                                            </div>
-                                        </div>
-                                        <div className={styles.containerFormModalCentro}>
-                                            <div className={styles.containerDropdowns}>
-                                                <DropdownButton
-                                                    id="dropdown-item-button"
-                                                    title={(sucursalActive ? (sucursalActive.domicilio.localidad.provincia.pais.nombre) : (paisActive ? (paisActive.nombre) : ("Seleccione un país")))}
-                                                    menuVariant="dark"
-                                                >
-                                                    {listaPaises.map((pais, index) => (
-                                                        <Dropdown.Item
-                                                            key={index}
-                                                            as="button"
-                                                            onClick={(event) => {
-                                                                event.preventDefault();
-                                                                handlePaisActive(pais)
-                                                            }}
-                                                        >{pais.nombre}</Dropdown.Item>
-                                                    ))}
-                                                </DropdownButton>
-                                                <DropdownButton
-                                                    id="dropdown-item-button"
-                                                    title={(sucursalActive ? (sucursalActive.domicilio.localidad.provincia.nombre) : (provinciaActive ? (provinciaActive.nombre) : ("Seleccione una provincia")))}
-                                                    menuVariant="dark"
-                                                >
-                                                    {paisActive ? (
-                                                        listaProvincias.map((provincia, index) => (
-                                                            <Dropdown.Item as="button" key={index} onClick={(event) => {
-                                                                event.preventDefault();
-                                                                handleProvinciaActive(provincia)
-                                                            }}>{provincia.nombre}</Dropdown.Item>
-                                                        ))) : (
-                                                        <Dropdown.ItemText>Seleccione un País primero</Dropdown.ItemText>
-                                                    )
-                                                    }
-                                                </DropdownButton>
-                                                <DropdownButton
-                                                    id="dropdown-item-button"
-                                                    title={(sucursalActive ? (sucursalActive.domicilio.localidad.nombre) : (localidadActive ? (localidadActive.nombre) : ("Seleccione una localidad")))}
-                                                    className={styles.dropdowns}
-                                                    menuVariant="dark"
-                                                >
-                                                    {provinciaActive ? (
-                                                        listaLocalidades.map((localidad, index) => (
-                                                            <Dropdown.Item as="button" key={index} onClick={(event) => {
-                                                                event.preventDefault();
-                                                                dispatch(setLocalidadActive(localidad))
-                                                                setFieldValue("domicilio.idLocalidad", localidad.id)
-                                                            }}>{localidad.nombre}</Dropdown.Item>
-                                                        ))) : (
-                                                        <Dropdown.ItemText>Seleccione una provincia primero</Dropdown.ItemText>
-                                                    )
-                                                    }
-                                                </DropdownButton>
-                                            </div>
-                                            <TextFieldValue
-                                                name="latitud"
-                                                type="number"
-                                                placeholder="Latitud"
-                                                customWidth="300px"
+                                        <div className={styles.containerCheckBox}>
+                                            <input
+                                                type="checkbox"
+                                                name="esCasaMatriz"
+                                                checked={values.esCasaMatriz}
+                                                onChange={() => setFieldValue("esCasaMatriz", !values.esCasaMatriz)}
+                                                id="casaMatriz"
+                                                style={{ accentColor: "#006284", scale: "1.5" }}
                                             />
-                                            <TextFieldValue
-                                                name="longitud"
-                                                type="number"
-                                                placeholder="Longitud"
-                                                customWidth="300px"
-                                            />
-                                        </div>
-                                        <div className={styles.containerFormModalDerecha}>
-                                            <TextFieldValue
-                                                name="domicilio.calle"
-                                                type="text"
-                                                placeholder="Nombre de la calle"
-                                                customWidth="300px"
-                                            />
-                                            <TextFieldValue
-                                                name="domicilio.numero"
-                                                type="number"
-                                                placeholder="Número de la calle"
-                                                customWidth="300px"
-                                            />
-                                            <TextFieldValue
-                                                name="domicilio.cp"
-                                                type="number"
-                                                placeholder="Código postal"
-                                                customWidth="300px"
-                                            />
-                                            <TextFieldValue
-                                                name="domicilio.piso"
-                                                type="number"
-                                                placeholder="Ingrese un número de piso"
-                                                customWidth="300px"
-                                            />
-                                            <TextFieldValue
-                                                name="domicilio.nroDpto"
-                                                type="number"
-                                                placeholder="Ingrese un número de departamento"
-                                                customWidth="300px"
-                                            />
+                                            <label htmlFor="casaMatriz">Casa Matriz</label>
                                         </div>
                                     </div>
-                                    <div className={styles.containerImagen}>
-                                        <div className={styles.containerAgregarimagen}>
-                                            {sucursalActive ? (
-                                                <ImageField
-                                                    name="logo"
-                                                    logoActive={sucursalActive.logo ? sucursalActive.logo : null}
-                                                />) : (
-                                                <ImageField
-                                                    name="logo"
-                                                    logoActive={null}
-                                                />
-                                            )}
+                                    <div className={styles.containerFormModalCentro}>
+                                        <div className={styles.containerDropdowns}>
+                                            <DropdownButton
+                                                id="dropdown-item-button"
+                                                title={(sucursalActive ? (sucursalActive.domicilio.localidad.provincia.pais.nombre) : (paisActive ? (paisActive.nombre) : ("Seleccione un país")))}
+                                                menuVariant="dark"
+                                            >
+                                                {listaPaises.map((pais, index) => (
+                                                    <Dropdown.Item
+                                                        key={index}
+                                                        as="button"
+                                                        onClick={(event) => {
+                                                            event.preventDefault();
+                                                            handlePaisActive(pais)
+                                                        }}
+                                                    >{pais.nombre}</Dropdown.Item>
+                                                ))}
+                                            </DropdownButton>
+                                            <DropdownButton
+                                                id="dropdown-item-button"
+                                                title={(sucursalActive ? (sucursalActive.domicilio.localidad.provincia.nombre) : (provinciaActive ? (provinciaActive.nombre) : ("Seleccione una provincia")))}
+                                                menuVariant="dark"
+                                            >
+                                                {paisActive ? (
+                                                    listaProvincias.map((provincia, index) => (
+                                                        <Dropdown.Item as="button" key={index} onClick={(event) => {
+                                                            event.preventDefault();
+                                                            handleProvinciaActive(provincia)
+                                                        }}>{provincia.nombre}</Dropdown.Item>
+                                                    ))) : (
+                                                    <Dropdown.ItemText>Seleccione un País primero</Dropdown.ItemText>
+                                                )
+                                                }
+                                            </DropdownButton>
+                                            <DropdownButton
+                                                id="dropdown-item-button"
+                                                title={(sucursalActive ? (sucursalActive.domicilio.localidad.nombre) : (localidadActive ? (localidadActive.nombre) : ("Seleccione una localidad")))}
+                                                className={styles.dropdowns}
+                                                menuVariant="dark"
+                                            >
+                                                {provinciaActive ? (
+                                                    listaLocalidades.map((localidad, index) => (
+                                                        <Dropdown.Item as="button" key={index} onClick={(event) => {
+                                                            event.preventDefault();
+                                                            dispatch(setLocalidadActive(localidad))
+                                                            setFieldValue("domicilio.idLocalidad", localidad.id)
+                                                        }}>{localidad.nombre}</Dropdown.Item>
+                                                    ))) : (
+                                                    <Dropdown.ItemText>Seleccione una provincia primero</Dropdown.ItemText>
+                                                )
+                                                }
+                                            </DropdownButton>
                                         </div>
+                                        <TextFieldValue
+                                            name="latitud"
+                                            type="number"
+                                            placeholder="Latitud"
+                                            customWidth="300px"
+                                        />
+                                        <TextFieldValue
+                                            name="longitud"
+                                            type="number"
+                                            placeholder="Longitud"
+                                            customWidth="300px"
+                                        />
                                     </div>
-                                    <div className={styles.containerBotonesFormModal}>
-                                        <Button className={styles.buttonModalCancelar} onClick={handleClose}>Cancelar</Button>
-                                        <Button className={styles.buttonModalConfirmar} type="submit">Confirmar</Button>
+                                    <div className={styles.containerFormModalDerecha}>
+                                        <TextFieldValue
+                                            name="domicilio.calle"
+                                            type="text"
+                                            placeholder="Nombre de la calle"
+                                            customWidth="300px"
+                                        />
+                                        <TextFieldValue
+                                            name="domicilio.numero"
+                                            type="number"
+                                            placeholder="Número de la calle"
+                                            customWidth="300px"
+                                        />
+                                        <TextFieldValue
+                                            name="domicilio.cp"
+                                            type="number"
+                                            placeholder="Código postal"
+                                            customWidth="300px"
+                                        />
+                                        <TextFieldValue
+                                            name="domicilio.piso"
+                                            type="number"
+                                            placeholder="Ingrese un número de piso"
+                                            customWidth="300px"
+                                        />
+                                        <TextFieldValue
+                                            name="domicilio.nroDpto"
+                                            type="number"
+                                            placeholder="Ingrese un número de departamento"
+                                            customWidth="300px"
+                                        />
                                     </div>
-                                </Form>
-                            )
-                        }
+                                </div>
+                                <div className={styles.containerImagen}>
+                                    <div className={styles.containerAgregarimagen}>
+                                        {sucursalActive ? (
+                                            <ImageField
+                                                name="logo"
+                                                logoActive={sucursalActive.logo ? sucursalActive.logo : null}
+                                            />) : (
+                                            <ImageField
+                                                name="logo"
+                                                logoActive={null}
+                                            />
+                                        )}
+                                    </div>
+                                </div>
+                                <div className={styles.containerBotonesFormModal}>
+                                    <Button className={styles.buttonModalCancelar} onClick={handleClose}>Cancelar</Button>
+                                    <Button className={styles.buttonModalConfirmar} type="submit">Confirmar</Button>
+                                </div>
+                            </Form>
+                        )}
                     </Formik>
                 </Modal.Body>
                 <Modal.Footer style={{ backgroundColor: "#08192D", borderTop: "none" }}></Modal.Footer>

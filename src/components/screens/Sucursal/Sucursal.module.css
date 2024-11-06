@@ -1,0 +1,119 @@
+.sucursalCont {
+    height: 100vh;
+    background-color: #33A6B8;
+    display: grid;
+    grid-template-columns: .16fr .84fr;
+}
+
+
+
+
+/* NAVBAR */
+.navbar {
+    background-color: #08192D;
+    color: white;
+
+    padding: 0px 20px 0px 20px;
+    height: 44px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar div {
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.navbar div Button {
+    border: none;
+    background-color: #33A6B8;
+    width: auto;
+    padding: 4px 8px 4px 8px;
+    display: flex;
+    justify-content: start;
+}
+
+.navbar div Button span {
+    color: white;
+    font-size: 20px;
+}
+
+.navbar div p {
+    margin-top: 15px;
+    font-size: 18px;
+}
+
+.agregarGenero {
+    border: none;
+    width: auto;
+    padding: 3px 12px 3px 12px;
+    background-color: #33A6B8;
+}
+
+.agregarGenero:hover{
+    background-color: #68C8D7;
+}
+
+
+
+
+/* ASIDE */
+
+.aside {
+    padding: 20px 0px 20px 20px;
+    background-color: #006284;
+    color: white;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.aside h2 { font-size: 26px; }
+
+.buttContainer {
+    padding: 0px 0px 20px 20px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.buttContainer Button {
+    background-color: #33A6B8;
+    border: none;
+    width: 120px;
+}
+
+.buttContainer Button:hover{
+    transform: scale(1.05);
+    background-color: #68C8D7;
+}
+
+.buttContainer Button:active {
+    transform: scale(1.05);
+    background-color: #68C8D7;
+}
+
+
+
+
+/* MAIN */
+
+.main {
+    padding-top: 50px;
+    display: flex;
+    align-items: start;
+}
+
+.buttonsTableContainer {
+    display: flex;
+    justify-content: center;
+    
+}

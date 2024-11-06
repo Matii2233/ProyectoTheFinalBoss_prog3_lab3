@@ -4,6 +4,9 @@ import SucursalReducer from "./slices/SucursalReducer"
 import PaisReducer from "./slices/PaisReducer"
 import ProvinciaReducer from './slices/ProvinciaReducer'
 import LocalidadReducer from './slices/LocalidadReducer'
+import AlergenoReducer from './slices/AlergenoReducer'
+import ProductoReducer from "./slices/ProductoReducer"
+
 
 export const store = configureStore({
     reducer: {
@@ -12,6 +15,8 @@ export const store = configureStore({
         paisReducer: PaisReducer,
         provinciaReducer: ProvinciaReducer,
         localidadReducer: LocalidadReducer,
+        alergenoReducer: AlergenoReducer,
+        productoReducer: ProductoReducer
     },
 })
 

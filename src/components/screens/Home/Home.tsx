@@ -16,9 +16,7 @@ export const Home = () => {
     // Estado del modal crear empresa
     const [openModalEmpresa, setOpenModalEmpresa] = useState(false);
     const [openModalSucursal, setOpenModalSucursal] = useState(false);
-    const empresaActive = useAppSelector(
-        (state) => state.empresaReducer.empresaActive
-    );
+    const empresaActive = useAppSelector( (state) => state.empresaReducer.empresaActive );
     const dispatch = useAppDispatch();
     const API_URL = import.meta.env.VITE_API_URL;
 
@@ -74,7 +72,7 @@ export const Home = () => {
                 setOpenModal={setOpenModalEmpresa}
                 openModal={openModalEmpresa}
             />
-            <ModalCrearSucursal 
+            <ModalCrearSucursal
                 openModal={openModalSucursal}
                 setOpenModal={setOpenModalSucursal}
             />
