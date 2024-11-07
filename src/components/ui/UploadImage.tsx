@@ -4,8 +4,6 @@ import Swal from "sweetalert2";
 import noImage from "../../assets/images/noImage.jpeg"
 import { IImagen } from "../../types/IImagen";
 import { ImageService } from "../../services/ImagenService";
-import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { setAlergenoActive } from "../../redux/store/slices/AlergenoReducer";
 import { IAlergenos } from "../../types/dtos/alergenos/IAlergenos";
 import { IProductos } from "../../types/dtos/productos/IProductos";
 import { ICategorias } from "../../types/dtos/categorias/ICategorias";
@@ -30,7 +28,9 @@ export const UploadImage: FC<IUploadImage> = ({
   typeElement,
 }) => {
   // Instanciamos el servicio para manejar las imágenes
-  const imageService = new ImageService("http://190.221.207.224:8090/images");
+  const API_URL = import.meta.env.VITE_API_URL
+  console.log(API_URL)
+  const imageService = new ImageService("http://localhost:8090/images");
 
   // Función para manejar el cambio de archivo en el input de carga de imágenes
   const handleFileChange = async (

@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import styles from "./Buttons.module.css"
 interface IButton {
-    onClick: ()=>void;
+    onClick?: ()=>void;
     children: React.ReactNode
     buttonColor: string
 }

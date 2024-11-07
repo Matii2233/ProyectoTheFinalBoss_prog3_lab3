@@ -7,6 +7,7 @@ import { ModalVerSurcusal } from "../../modals/modalsSucursal/modalVerSucursal/M
 import styles from "./TarjetaSucursal.module.css"
 import Buttons from "../../buttons/Buttons";
 import { ModalCrearSucursal } from "../../modals/modalsSucursal/modalCrearSucursal/ModalCrearSucursal";
+import { Link } from "react-router-dom";
 
 export const TarjetaSucursal = () => {
 
@@ -45,9 +46,6 @@ export const TarjetaSucursal = () => {
         dispatch(setSucursalActive(sucursal))
         setOpenModalCrearSucursal(true)
     }
-    const handleAbrirSucursal = ()=>{
-
-    }
     return (
         <div className={styles.containerSucursales}>
             {sucursalesEmpresa.map((sucursal, index) => (
@@ -66,7 +64,9 @@ export const TarjetaSucursal = () => {
                         </div>
                         <div className={styles.contenedorBotonesTarjetaSucursal} style={{marginTop: "10px"}}>
                             <Buttons onClick={() => handleEditarSucursal(sucursal)} buttonColor={"0077FF"}><span className="material-symbols-outlined" style={{ scale: iconScale, display:"flex", alignItems:"center", justifyContent:"center"}}>edit</span></Buttons>
-                            <Buttons onClick={handleAbrirSucursal} buttonColor={"00A419"}><span className="material-symbols-outlined" style={{ scale: iconScale, display:"flex", alignItems:"center", justifyContent:"center"}}>apartment</span></Buttons>
+                            <Link to={`/sucursal`}>
+                              <Buttons buttonColor={"00A419"}><span className="material-symbols-outlined" style={{ scale: iconScale, display:"flex", alignItems:"center", justifyContent:"center"}}>apartment</span></Buttons>
+                            </Link>
                             <Buttons onClick={() => handleVerSucursal(sucursal)} buttonColor={"FC7600"}><span className="material-symbols-outlined" style={{ scale: iconScale, display:"flex", alignItems:"center", justifyContent:"center"}}>visibility</span></Buttons>
                         </div>
                     </div>
