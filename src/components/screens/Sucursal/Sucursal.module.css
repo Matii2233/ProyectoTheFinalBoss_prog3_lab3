@@ -10,11 +10,11 @@
 
 /* NAVBAR */
 .navbar {
-    background-color: #08192D;
+    background-color: #006284;
     color: white;
 
     padding: 0px 20px 0px 20px;
-    height: 44px;
+    height: 48px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -33,8 +33,13 @@
     background-color: #33A6B8;
     width: auto;
     padding: 4px 8px 4px 8px;
+
     display: flex;
     justify-content: start;
+}
+
+.navbar div Button:hover {
+    background-color: #68C8D7;
 }
 
 .navbar div Button span {
@@ -48,14 +53,20 @@
 }
 
 .agregarGenero {
-    border: none;
-    width: auto;
-    padding: 3px 12px 3px 12px;
-    background-color: #33A6B8;
+    border: none!important;
+    width: auto!important;
+    background-color: #33A6B8!important;
+    height: 72%;
+    font-size: 15px!important;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 .agregarGenero:hover{
-    background-color: #68C8D7;
+    background-color: #68C8D7!important;
 }
 
 
@@ -73,7 +84,9 @@
     gap: 20px;
 }
 
-.aside h2 { font-size: 26px; }
+.aside h2 {
+    font-size: 26px;
+}
 
 .buttContainer {
     padding: 0px 0px 20px 20px;

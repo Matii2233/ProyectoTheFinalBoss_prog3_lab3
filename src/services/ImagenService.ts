@@ -2,7 +2,7 @@ import Swal from "sweetalert2";
 import { BackendClient } from "./BackendClient";
 import { IImagen } from "../types/IImagen";
 
-const API_URL = import.meta.env.VITE_URL_API;
+const API_URL = import.meta.env.VITE_API_URL
 
 // Clase ImageService que extiende BackendClient para manejar imágenes con la API
 export class ImageService extends BackendClient<IImagen> {
@@ -48,6 +48,7 @@ export class ImageService extends BackendClient<IImagen> {
     url: string,
     pathDelete: string
   ): Promise<void> {
+
     // Regex para extraer el ID público de la imagen desde su URL de Cloudinary
     const regex =
       /https:\/\/res\.cloudinary\.com\/[\w\-]+\/image\/upload\/([\w\-]+)/;
@@ -67,7 +68,7 @@ export class ImageService extends BackendClient<IImagen> {
       if (!publicId) {
         throw new Error("ID público de la imagen no encontrado");
       }
-
+      
       // Realiza una solicitud POST a la API para eliminar la imagen en el servidor
       const response = await fetch(
         `${API_URL}/${pathDelete}/deleteImg?id=${idElement}&publicId=${publicId[1]}`,

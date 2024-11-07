@@ -29,8 +29,7 @@ export const UploadImage: FC<IUploadImage> = ({
 }) => {
   // Instanciamos el servicio para manejar las imágenes
   const API_URL = import.meta.env.VITE_API_URL
-  console.log(API_URL)
-  const imageService = new ImageService("http://localhost:8090/images");
+  const imageService = new ImageService(`${API_URL}/images`);
 
   // Función para manejar el cambio de archivo en el input de carga de imágenes
   const handleFileChange = async (
@@ -78,7 +77,6 @@ export const UploadImage: FC<IUploadImage> = ({
   const handleDeleteImagen = async () => {
     // Si existe un objeto de imagen y la función para actualizarlo
     if (imageObjeto && setImageObjeto && elementActive && typeElement) {
-      console.log('se entro en la condivion')
       await imageService
         .deleteImgItems(elementActive?.id, imageObjeto.url, typeElement)
         .then(() => {

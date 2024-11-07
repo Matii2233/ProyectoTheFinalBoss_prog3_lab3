@@ -69,13 +69,11 @@ export const ModalCrearAlergeno = ({ getAlergenos, isOpenModal, setIsOpenModal }
               initialValues={alergenoActive ? alergenoActive : initialValues}
               enableReinitialize={true}
               onSubmit={async (values: ICreateAlergeno | IUpdateAlergeno) => {
-                console.log('form submmited', values)
 
                 values.imagen = imageAlergeno
 
                 // Enviar los datos al servidor al enviar el formulario
                 const alergenoService = new AlergenosService(API_URL + "/alergenos");
-                console.log(API_URL)
                 if (alergenoActive) {
                   await alergenoService.put(alergenoActive.id, values as IUpdateAlergeno);
                 } else {

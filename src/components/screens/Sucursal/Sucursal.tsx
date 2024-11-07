@@ -47,7 +47,7 @@ export const Sucursal = () => {
   };
 
   // Eliminar un alergeno
-  const handleDelete = async (id: number) => {
+  const handleDeleteAlergeno = async (id: number) => {
     try {
       await alergenosService.deleteById(id);
       // Actualiza la lista para reflejar el cambio
@@ -81,10 +81,10 @@ export const Sucursal = () => {
       key: 'denominacion',
     },
     {
-      label: 'Imagen',
+      label: 'AlergenoId',
       key: 'imagen',
       render: (alergenos:IAlergenos) => {
-        return alergenos.imagen?alergenos.imagen.id:'alergenos sin imagen!'
+        return alergenos?alergenos.id:'alergeno sin Id'
       }
     },
     {
@@ -108,6 +108,17 @@ export const Sucursal = () => {
 
   const sucursalActive = useAppSelector( (state) => state.sucursalReducer.sucursalActive );
 
+  const handleActiveButtonStyle = () => {
+    if(isAlergenosOpen) {
+      return {
+        transform: 'scale(1.05)',
+        fontWeight: '500',
+      }
+    } else {
+      return {}
+    }
+  }
+
   return (
     <>
       <nav className={styles.navbar}>
@@ -130,7 +141,13 @@ export const Sucursal = () => {
           <h2>Administracion</h2>
 
           <div className={styles.buttContainer}>
-            <Button className={styles.butt1} onClick={() => setIsAlergenosOpen(true)}>Alergeno</Button>
+            <Button
+            className={styles.butt1}
+            style={handleActiveButtonStyle()}
+            onClick={() => setIsAlergenosOpen(!isAlergenosOpen)}
+            >
+              Alergeno
+            </Button>
             <Button className={styles.butt2}>Categorias</Button>
             <Button className={styles.butt3} onClick={() => console.log(productosData)}>Productos</Button>
           </div>
@@ -141,7 +158,7 @@ export const Sucursal = () => {
             <TableGeneric<IAlergenos>
               dataTable={alergenosData}
               columns={alergenosColumns?alergenosColumns:[]}
-              handleDelete={handleDelete}
+              handleDelete={handleDeleteAlergeno}
               isOpenModal={isOpenModal}
               setOpenModal={handleOpenEditarAlergeno}
             />
