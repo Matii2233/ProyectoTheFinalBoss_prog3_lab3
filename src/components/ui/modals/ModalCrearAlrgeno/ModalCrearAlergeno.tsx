@@ -69,10 +69,9 @@ export const ModalCrearAlergeno = ({ getAlergenos, isOpenModal, setIsOpenModal }
               initialValues={alergenoActive ? alergenoActive : initialValues}
               enableReinitialize={true}
               onSubmit={async (values: ICreateAlergeno | IUpdateAlergeno) => {
-
+                (imageAlergeno ? (values.imagen = imageAlergeno) : (values.imagen = null))
                 values.imagen = imageAlergeno
 
-                // Enviar los datos al servidor al enviar el formulario
                 const alergenoService = new AlergenosService(API_URL + "/alergenos");
                 if (alergenoActive) {
                   await alergenoService.put(alergenoActive.id, values as IUpdateAlergeno);
@@ -84,9 +83,9 @@ export const ModalCrearAlergeno = ({ getAlergenos, isOpenModal, setIsOpenModal }
                 handleClose();
               }}
             >
-              {({ handleSubmit, errors, touched }) => (
+              {() => (
                 <>
-                  <Form autoComplete="off" onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "5vh" }}>
+                  <Form autoComplete="off" style={{ display: "flex", flexDirection: "column", gap: "5vh" }}>
                     <div className={styles.formContainer}>
                       <TextFieldValue
                         name="denominacion"

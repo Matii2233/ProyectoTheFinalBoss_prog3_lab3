@@ -17,12 +17,14 @@ import { IProvincia } from "../../../../../types/IProvincia";
 import { removeLocalidadActive, setLocalidadActive, setLocalidadesPorProvincia } from "../../../../../redux/store/slices/LocalidadReducer";
 import { LocalidadService } from "../../../../../services/LocalidadService";
 import { ILocalidad } from "../../../../../types/ILocalidad";
-import ImageField from "../../../fields/imageField/ImageField";
 import { removeSucursalActive } from "../../../../../redux/store/slices/SucursalReducer";
 import { EmpresaService } from "../../../../../services/EmpresaService";
 import { setEmpresas } from "../../../../../redux/store/slices/EmpresaReducer";
 import styles from "./ModalCrearSucursal.module.css"
 import { IUpdateSucursal } from "../../../../../types/dtos/sucursal/IUpdateSucursal";
+import "../../../../../assets/scss/_content-sucursal.scss"
+import { UploadImage } from "../../../UploadImage";
+import { ISucursal } from "../../../../../types/dtos/sucursal/ISucursal";
 
 interface IModalSucursal {
     openModal: boolean;
@@ -199,7 +201,6 @@ export const ModalCrearSucursal: FC<IModalSucursal> = ({ openModal, setOpenModal
                                 nroDpto: Yup.number().required("campo requerido"),
                                 idLocalidad: Yup.number().required("campo requerido"),
                             }),
-                            logo: Yup.string().nullable(),
                         })}
                         initialValues={sucursalActive ?
                             {
@@ -223,6 +224,7 @@ export const ModalCrearSucursal: FC<IModalSucursal> = ({ openModal, setOpenModal
                             : initialValues}
                         enableReinitialize={true}
                         onSubmit={async (values: ICreateSucursal) => {
+                            (image ? (values.logo = image) : (values.logo = null))
                             const sucursalService = new SucursalService(API_URL + "/sucursales");
                             if (sucursalActive) {
                                 const updateValues: IUpdateSucursal = {
@@ -402,16 +404,7 @@ export const ModalCrearSucursal: FC<IModalSucursal> = ({ openModal, setOpenModal
                                 </div>
                                 <div className={styles.containerImagen}>
                                     <div className={styles.containerAgregarimagen}>
-                                        {sucursalActive ? (
-                                            <ImageField
-                                                name="logo"
-                                                logoActive={sucursalActive.logo ? sucursalActive.logo : null}
-                                            />) : (
-                                            <ImageField
-                                                name="logo"
-                                                logoActive={null}
-                                            />
-                                        )}
+                                        <UploadImage image={image} setImage={setImage} elementActive={sucursalActive as ISucursal}/>
                                     </div>
                                 </div>
                                 <div className={styles.containerBotonesFormModal}>

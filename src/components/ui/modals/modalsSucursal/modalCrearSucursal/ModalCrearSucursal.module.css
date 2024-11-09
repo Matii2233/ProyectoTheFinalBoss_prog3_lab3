@@ -80,7 +80,8 @@ padding:5px
 }
 .containerAgregarimagen {
     background-color: #006284!important;
-    width: 324px!important;
+    border-radius: .4rem;
+    width: 300px!important;
     height: 100px!important;
     display: flex!important;
     justify-content: center!important;

@@ -7,7 +7,9 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import styles from "./ModalCrearEmpresa.module.css"
 import TextFieldValue from "../../../fields/textField/TextField";
-import ImageField from "../../../fields/imageField/ImageField";
+import { useState } from "react";
+import { UploadImage } from "../../../UploadImage";
+import { IEmpresa } from "../../../../../types/dtos/empresa/IEmpresa";
 
 interface IModalEmpresa {
     getEmpresas: Function; // Función para obtener las empresas
@@ -27,7 +29,7 @@ export const ModalCrearEmpresa = ({
         cuit: 0,
         logo: null,
     };
-
+    const [image, setImage] = useState<string|null>()
     const API_URL = import.meta.env.VITE_API_URL;
 
 
@@ -65,12 +67,12 @@ export const ModalCrearEmpresa = ({
                             nombre: Yup.string().required("campo requerido"),
                             razonSocial: Yup.string().required("campo requerido"),
                             cuit: Yup.number().required('campo requerido'),
-                            logo: Yup.string().required("campo requerido")
                         })
                         }
                         initialValues={empresaActive ? empresaActive : initialValues}
                         enableReinitialize={true}
                         onSubmit={async (values: ICreateEmpresaDto) => {
+                            (image ? (values.logo = image) : (values.logo = null))
                             // Enviar los datos al servidor al enviar el formulario
                             if (empresaActive) {
                                 const empresaService = new EmpresaService(API_URL + "/empresas");
@@ -107,10 +109,7 @@ export const ModalCrearEmpresa = ({
                                             customWidth="45vw"
                                         />
                                         <div className={styles.containerAgregarimagen}>
-                                            <ImageField
-                                                name="logo" 
-                                                logoActive={empresaActive ? empresaActive.logo : null}
-                                            />
+                                            <UploadImage image={image} setImage={setImage} elementActive={empresaActive as IEmpresa}/>
                                         </div>
                                     </div>
                                     <div className={styles.containerBotonesFormModal}>

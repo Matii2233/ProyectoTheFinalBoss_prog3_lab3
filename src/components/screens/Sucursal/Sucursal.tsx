@@ -46,6 +46,7 @@ export const Sucursal = () => {
     });
   };
 
+
   // Eliminar un alergeno
   const handleDeleteAlergeno = async (id: number) => {
     try {

@@ -7,10 +7,12 @@ import { ImageService } from "../../services/ImagenService";
 import { IAlergenos } from "../../types/dtos/alergenos/IAlergenos";
 import { IProductos } from "../../types/dtos/productos/IProductos";
 import { ICategorias } from "../../types/dtos/categorias/ICategorias";
+import { ISucursal } from "../../types/dtos/sucursal/ISucursal";
+import { IEmpresa } from "../../types/dtos/empresa/IEmpresa";
 
 // Definimos la interfaz de las propiedades que recibirá el componente UploadImage
 interface IUploadImage {
-  elementActive: IAlergenos | IProductos | ICategorias
+  elementActive: IAlergenos | IProductos | ICategorias | ISucursal | IEmpresa
   image?: string | null; // URL de la imagen cargada, opcional
   setImage?: (image: string | null) => void; // Función para actualizar la imagen cargada
   imageObjeto?: IImagen | null; // Objeto de tipo IImagen que representa la imagen cargada
@@ -130,9 +132,9 @@ export const UploadImage: FC<IUploadImage> = ({
             alt="Uploaded"
             style={{
               backgroundColor: "#ccc",
-              width: "8vw",
+              maxWidth:"100px",
+              maxHeight:"100px",
               borderRadius: ".4rem",
-              height: "8vh",
               objectFit: "fill",
             }}
           />
