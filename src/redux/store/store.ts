@@ -6,6 +6,7 @@ import ProvinciaReducer from './slices/ProvinciaReducer'
 import LocalidadReducer from './slices/LocalidadReducer'
 import AlergenoReducer from './slices/AlergenoReducer'
 import ProductoReducer from "./slices/ProductoReducer"
+import CategoriaReducer from "./slices/CategoriasReducer"
 
 
 export const store = configureStore({
@@ -16,7 +17,8 @@ export const store = configureStore({
         provinciaReducer: ProvinciaReducer,
         localidadReducer: LocalidadReducer,
         alergenoReducer: AlergenoReducer,
-        productoReducer: ProductoReducer
+        productoReducer: ProductoReducer,
+        categoriaReducer: CategoriaReducer
     },
 })
 

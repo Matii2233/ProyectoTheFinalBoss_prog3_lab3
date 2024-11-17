@@ -8,7 +8,7 @@ const API_URL = import.meta.env.VITE_API_URL
 export class ImageService extends BackendClient<IImagen> {
   constructor(baseUrl: string) {
     // Llama al constructor de BackendClient con la URL base de imágenes
-    super(`${baseUrl}`);
+    super(`${API_URL}/${baseUrl}`);
   }
 
   // Método para subir una imagen a la API
@@ -21,7 +21,6 @@ export class ImageService extends BackendClient<IImagen> {
         Swal.showLoading(); // Muestra el icono de carga
       },
     });
-
     try {
       // Realiza una solicitud POST a la API para cargar la imagen
       const response = await fetch(`${this.baseUrl}/uploads`, {
@@ -53,6 +52,7 @@ export class ImageService extends BackendClient<IImagen> {
     const regex =
       /https:\/\/res\.cloudinary\.com\/[\w\-]+\/image\/upload\/([\w\-]+)/;
     const publicId = url.match(regex);
+    console.log('public id: ', publicId)
 
     // Muestra un mensaje de eliminación utilizando SweetAlert2
     Swal.fire({
@@ -76,6 +76,7 @@ export class ImageService extends BackendClient<IImagen> {
           method: "POST",
         }
       );
+      console.log(`${API_URL}/${pathDelete}/deleteImg?id=${idElement}&publicId=${publicId[1]}`)
 
       // Si la respuesta no es satisfactoria, lanza un error
       if (!response.ok) {
@@ -84,6 +85,7 @@ export class ImageService extends BackendClient<IImagen> {
     } finally {
       Swal.close(); // Cierra el mensaje de eliminación
     }
+    console.log(`${API_URL}/${pathDelete}/deleteImg?id=${idElement}&publicId=${publicId[1]}`)
   }
 
   // Método para eliminar una imagen de Cloudinary directamente

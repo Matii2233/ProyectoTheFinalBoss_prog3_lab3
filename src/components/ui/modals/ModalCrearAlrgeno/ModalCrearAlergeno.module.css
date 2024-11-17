@@ -42,8 +42,9 @@
 
 .containerAgregarimagen {
     background-color: #006284!important;
-    width: 324px!important;
-    height: 100px!important;
+    width: 300px!important;
+    height: 140px!important;
+    
 
     display: flex!important;
     justify-content: center!important;

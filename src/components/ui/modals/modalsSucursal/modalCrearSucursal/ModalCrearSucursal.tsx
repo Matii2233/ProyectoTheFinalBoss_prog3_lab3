@@ -42,6 +42,15 @@ export const ModalCrearSucursal: FC<IModalSucursal> = ({ openModal, setOpenModal
         (state) => state.sucursalReducer.sucursalActive
     );
 
+        // Usamos useEffect para actualizar imageAlergeno cuando alergenoActive cambie
+    useEffect(() => {
+        if (sucursalActive && sucursalActive.logo) {
+        setImage(sucursalActive.logo); // Actualizamos el estado local con la imagen del alergeno
+        } else {
+        setImage(null); // Si no hay imagen en alergenoActive, reseteamos el estado local
+        }
+    }, [sucursalActive]); // Solo se ejecuta cuando `alergenoActive` cambia
+
     const initialValues: ICreateSucursal = {
         nombre: "",
         horarioApertura: "00:00:00",
@@ -404,7 +413,7 @@ export const ModalCrearSucursal: FC<IModalSucursal> = ({ openModal, setOpenModal
                                 </div>
                                 <div className={styles.containerImagen}>
                                     <div className={styles.containerAgregarimagen}>
-                                        <UploadImage image={image} setImage={setImage} elementActive={sucursalActive as ISucursal}/>
+                                        <UploadImage image={image} setImage={setImage}/>
                                     </div>
                                 </div>
                                 <div className={styles.containerBotonesFormModal}>

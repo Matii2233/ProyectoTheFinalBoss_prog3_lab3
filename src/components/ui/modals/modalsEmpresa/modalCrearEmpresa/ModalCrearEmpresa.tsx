@@ -7,7 +7,7 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import styles from "./ModalCrearEmpresa.module.css"
 import TextFieldValue from "../../../fields/textField/TextField";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UploadImage } from "../../../UploadImage";
 import { IEmpresa } from "../../../../../types/dtos/empresa/IEmpresa";
 
@@ -36,6 +36,16 @@ export const ModalCrearEmpresa = ({
     const empresaActive = useAppSelector(
         (state) => state.empresaReducer.empresaActive
     );
+
+    // Usamos useEffect para actualizar imageAlergeno cuando alergenoActive cambie
+    useEffect(() => {
+        if (empresaActive && empresaActive.logo) {
+        setImage(empresaActive.logo); // Actualizamos el estado local con la imagen del alergeno
+        } else {
+        setImage(null); // Si no hay imagen en alergenoActive, reseteamos el estado local
+        }
+    }, [empresaActive]); // Solo se ejecuta cuando `alergenoActive` cambia
+
     const dispatch = useAppDispatch();
 
     const handleClose = () => {
@@ -109,7 +119,7 @@ export const ModalCrearEmpresa = ({
                                             customWidth="45vw"
                                         />
                                         <div className={styles.containerAgregarimagen}>
-                                            <UploadImage image={image} setImage={setImage} elementActive={empresaActive as IEmpresa}/>
+                                            <UploadImage image={image} setImage={setImage}/>
                                         </div>
                                     </div>
                                     <div className={styles.containerBotonesFormModal}>

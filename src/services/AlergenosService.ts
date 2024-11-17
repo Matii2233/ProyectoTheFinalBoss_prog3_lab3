@@ -64,16 +64,6 @@ export class AlergenosService extends BackendClient<IAlergenos | ICreateAlergeno
     }
   }
 
-
-  // async deleteById(id: number): Promise<void> {
-  //   const response = await fetch(`${this.baseUrl}/${id}`, {
-  //     method: "DELETE",
-  //   });
-  //   if (!response.ok) {
-  //     throw new Error(`Error al eliminar el elemento con ID ${id}`);
-  //   }
-  // }
-
   // Método para eliminar un elemento por su ID
   async deleteById(id: number): Promise<void> {
     Swal.fire({
@@ -84,7 +74,6 @@ export class AlergenosService extends BackendClient<IAlergenos | ICreateAlergeno
       },
     });
     try {
-      console.log(this.baseUrl)
       const response = await fetch(`${this.baseUrl}/${id}`, {
         method: "DELETE",
       });

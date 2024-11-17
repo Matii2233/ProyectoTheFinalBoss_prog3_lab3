@@ -1,36 +1,41 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IProductos } from "../../../types/dtos/productos/IProductos";
 
+
 interface IInitialState {
-  dataProductos: IProductos[]
-  productoActive: null | IProductos
+    dataProductos: IProductos[]
+    productoActive: null | IProductos;
 }
 
 const initialState: IInitialState = {
-  dataProductos: [],
-  productoActive: null,
-};
-
-interface PayloadSetElement {
-  element: IProductos;
+    dataProductos: [],
+    productoActive: null
 }
 
-const ProductoReducer = createSlice({
-  name: "ProductoReducer",
-  initialState,
-  reducers: {
-    setDataProducto(state, action: PayloadAction<IProductos[]>) {
-      state.dataProductos = action.payload;
-    },
-    setProductoActive(state, action: PayloadAction<PayloadSetElement>) {
-      state.productoActive = action.payload.element;
-    },
-    removeProductoActive(state) {
-      state.productoActive = null;
-    },
-  },
-});
+interface PayloadSetElement {
+    element: IProductos
+}
 
-export const { setDataProducto, setProductoActive, removeProductoActive } = ProductoReducer.actions;
+const ProductosReducer = createSlice({
+    name: "ProductosReducer",
+    initialState,
+    reducers: {
+        setDataProductos(state, action: PayloadAction<IProductos[]>) {
+            state.dataProductos = action.payload;
+        },
+        setProductoActive(state, action: PayloadAction<PayloadSetElement>) {
+            state.productoActive = action.payload.element;
+        },
+        removeProductoActive(state) {
+            state.productoActive = null
+        },
+        removeProductoById(state, action : PayloadAction<number>) { 
+            state.dataProductos = state.dataProductos.filter(
+                (producto) => producto.id !== action.payload
+            );
+        },
+    }});
 
-export default ProductoReducer.reducer;
+export const { setDataProductos, setProductoActive, removeProductoActive,removeProductoById } = ProductosReducer.actions
+
+export default ProductosReducer.reducer

@@ -105,13 +105,9 @@
 }
 
 .buttContainer Button:hover{
-    transform: scale(1.05);
-    background-color: #68C8D7;
-}
-
-.buttContainer Button:active {
-    transform: scale(1.05);
-    background-color: #68C8D7;
+    cursor: pointer!important;
+    transform: scale(1.05)!important;
+    background-color: #68C8D7!important;
 }
 
 
@@ -119,9 +115,15 @@
 
 /* MAIN */
 
+.containerFiltro{
+    margin:  10px;
+    margin-left: 65px;
+}
+
 .main {
-    padding-top: 50px;
+    padding-top: 10px;
     display: flex;
+    flex-direction: column;
     align-items: start;
 }
 

@@ -12,7 +12,7 @@ import { IEmpresa } from "../../types/dtos/empresa/IEmpresa";
 
 // Definimos la interfaz de las propiedades que recibirá el componente UploadImage
 interface IUploadImage {
-  elementActive: IAlergenos | IProductos | ICategorias | ISucursal | IEmpresa
+  // elementActive: IAlergenos | IProductos | ICategorias | ISucursal | IEmpresa | null
   image?: string | null; // URL de la imagen cargada, opcional
   setImage?: (image: string | null) => void; // Función para actualizar la imagen cargada
   imageObjeto?: IImagen | null; // Objeto de tipo IImagen que representa la imagen cargada
@@ -22,7 +22,7 @@ interface IUploadImage {
 
 // Componente funcional que permite subir y eliminar imágenes
 export const UploadImage: FC<IUploadImage> = ({
-  elementActive,
+  // elementActive,
   image,
   setImage,
   imageObjeto,
@@ -30,8 +30,7 @@ export const UploadImage: FC<IUploadImage> = ({
   typeElement,
 }) => {
   // Instanciamos el servicio para manejar las imágenes
-  const API_URL = import.meta.env.VITE_API_URL
-  const imageService = new ImageService(`${API_URL}/images`);
+  const imageService = new ImageService("images");
 
   // Función para manejar el cambio de archivo en el input de carga de imágenes
   const handleFileChange = async (
@@ -75,10 +74,14 @@ export const UploadImage: FC<IUploadImage> = ({
     }
   };
 
+  const elementActive = {id:45}
+
   // Función para manejar la eliminación de la imagen
   const handleDeleteImagen = async () => {
     // Si existe un objeto de imagen y la función para actualizarlo
     if (imageObjeto && setImageObjeto && elementActive && typeElement) {
+      console.log('elemento activo id: ', elementActive.id)
+      if (elementActive as IAlergenos) console.log('imagen del elemento activo: ', imageObjeto)
       await imageService
         .deleteImgItems(elementActive?.id, imageObjeto.url, typeElement)
         .then(() => {
@@ -97,8 +100,6 @@ export const UploadImage: FC<IUploadImage> = ({
     <div
       style={{
         width: "22vw",
-        border: "1px solid #ccc",
-        borderRadius: ".4rem",
         padding: ".4rem",
         height: "100%",
         display: "flex",

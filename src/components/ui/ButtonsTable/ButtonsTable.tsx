@@ -9,12 +9,14 @@ import { setProductoActive } from "../../../redux/store/slices/ProductoReducer";
 interface IButtonsTable {
   el: IAlergenos | IProductos | ICategorias
   handleDelete: (id: number) => void;
+  setOpenModalVerProducto: (state: boolean) => void;
   setOpenModal: (state: boolean) => void;
 }
 
 export const ButtonsTable = ({
   el,
   handleDelete,
+  setOpenModalVerProducto,
   setOpenModal,
 }: IButtonsTable) => {
 
@@ -51,6 +53,7 @@ export const ButtonsTable = ({
         <Buttons onClick={() => handleModalSelected(el)} buttonColor="0077FF">
           <span className="material-symbols-outlined">edit</span>
         </Buttons>
+
         <Buttons onClick={handleDeleteItem} buttonColor='CA1212'>
           <span className="material-symbols-outlined">delete_forever</span>
         </Buttons>

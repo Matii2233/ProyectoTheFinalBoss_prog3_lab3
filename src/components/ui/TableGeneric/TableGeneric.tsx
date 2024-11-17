@@ -13,9 +13,12 @@ import { useAppDispatch } from "../../../hooks/redux";
 import { setAlergenoActive, setDataAlergeno } from "../../../redux/store/slices/AlergenoReducer";
 import Buttons from "../buttons/Buttons";
 import { IAlergenos } from "../../../types/dtos/alergenos/IAlergenos";
-import { setProductoActive } from "../../../redux/store/slices/ProductoReducer";
+import { setDataProductos, setProductoActive } from "../../../redux/store/slices/ProductoReducer";
 import { IProductos } from "../../../types/dtos/productos/IProductos";
 import { ICategorias } from "../../../types/dtos/categorias/ICategorias";
+import { ModalCrearProducto } from "../modals/modalProductos/ModalCrearProducto/ModalCrearProducto";
+import { ModalVerProducto } from "../modals/modalProductos/ModalVerProducto/ModalVerProducto";
+import { ProductosService } from "../../../services/ProductosService";
 
 
 interface ITableColumn<T> {
@@ -30,6 +33,7 @@ export interface ITableProps<T> {
   handleDelete: (id: number) => void;
   isOpenModal: boolean
   setOpenModal: (state: boolean) => void;
+  setModalVerProducto?: (state: boolean) => void
 }
 
 export const TableGeneric = <T extends { id: any }>({
@@ -38,6 +42,7 @@ export const TableGeneric = <T extends { id: any }>({
   handleDelete,
   isOpenModal,
   setOpenModal,
+  setModalVerProducto
 }: ITableProps<T>) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -64,6 +69,8 @@ export const TableGeneric = <T extends { id: any }>({
 
   const alergenosService = new AlergenosService(API_URL+"/alergenos")
 
+  const productosService = new ProductosService(API_URL + "/articulos")
+
   const dispatch = useAppDispatch();
   
   const getAlergenos = async () => {
@@ -71,24 +78,37 @@ export const TableGeneric = <T extends { id: any }>({
         dispatch(setDataAlergeno(alergenosData));
     });
   };
-  //
+
+  const getProductos = async () => {
+    await productosService.getAll().then((productosData) => {
+        dispatch(setDataProductos(productosData))
+    });
+  };
 
   const handleEdit = (row: IAlergenos | IProductos | ICategorias) => {
+    console.log(row)
+    
+    if (row as IProductos) {
+      dispatch(setProductoActive({ element: row as IProductos }));
+    } 
+
     if (row as IAlergenos) {
       dispatch(setAlergenoActive({ element: row as IAlergenos }));
-    } else if (row as IProductos) {
-      dispatch(setProductoActive({ element: row as IProductos }));
-    } else {
-      console.error("Tipo de elemento no reconocido");
     }
 
     setOpenModal(true);
   };
 
+  const handleVerProducto = (el: IProductos) => {
+    dispatch(setProductoActive({ element: el }));
+    setModalVerProducto ? setModalVerProducto(true) : console.log('no existe setOpenModalVerProducto ');
+  }
+
   return (
     <>
       <div
         style={{
+          height: "100%",
           width: "100%",
           display: "flex",
           justifyContent: "center",
@@ -125,7 +145,12 @@ export const TableGeneric = <T extends { id: any }>({
                                     <Buttons onClick={()=>handleEdit(row)} buttonColor="0077FF">
                                       <span className="material-symbols-outlined" style={{ scale: '1.0', display:"flex", alignItems:"center", justifyContent:"center"}}>edit</span>
                                     </Buttons>
-                                    <Buttons onClick={() => handleDelete(row.id)} buttonColor="FC7600">
+                                    {'precioVenta' in row && (
+                                      <Buttons onClick={() => handleVerProducto(row)} buttonColor="FF8000">
+                                      <span className="material-symbols-outlined" style={{ scale: '1.0', display: "flex", alignItems: "center", justifyContent: "center" }}>visibility</span>
+                                      </Buttons>
+                                    )}
+                                    <Buttons onClick={() => handleDelete(row.id)} buttonColor="DE2C2C">
                                       <span className="material-symbols-outlined" style={{ scale: '1.0', display:"flex", alignItems:"center", justifyContent:"center"}}>delete</span>
                                     </Buttons>
                                   </div>
@@ -155,13 +180,8 @@ export const TableGeneric = <T extends { id: any }>({
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Paper>
-      </div>
 
-      <ModalCrearAlergeno
-        getAlergenos={getAlergenos}
-        isOpenModal={isOpenModal}
-        setIsOpenModal={setOpenModal}
-      />
+      </div>
     </>
   );
 };

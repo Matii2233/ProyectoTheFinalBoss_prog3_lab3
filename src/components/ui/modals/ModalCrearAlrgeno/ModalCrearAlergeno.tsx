@@ -8,10 +8,9 @@ import TextFieldValue from "../../fields/textField/TextField";
 import styles from "./ModalCrearAlergeno.module.css"
 import { UploadImage } from "../../UploadImage";
 import { removeAlergenoActive } from "../../../../redux/store/slices/AlergenoReducer";
-import { useState } from "react";
-import { IImagen } from "../../../../types/IImagen";
 import { IUpdateAlergeno } from "../../../../types/dtos/alergenos/IUpdateAlergeno";
-import { IAlergenos } from "../../../../types/dtos/alergenos/IAlergenos";
+import { useEffect, useState } from "react";
+import { IImagen } from "../../../../types/IImagen";
 
 interface IProprModalCrearAlergeno {
   getAlergenos: Function
@@ -26,17 +25,28 @@ export const ModalCrearAlergeno = ({ getAlergenos, isOpenModal, setIsOpenModal }
     imagen: null
   };
 
-  const [imageAlergeno, setImageAlergeno] = useState<IImagen | null>(null);
-
   const API_URL = import.meta.env.VITE_API_URL;
 
   const dispatch = useAppDispatch()
 
-  const alergenoActive = useAppSelector((state) => state.alergenoReducer.alergenoActive)
+  const alergenoActive = useAppSelector(
+    (state) => state.alergenoReducer.alergenoActive
+  );
+
+  const [imageAlergeno, setImageAlergeno] = useState<IImagen | null>(null);
+
+  // Usamos useEffect para actualizar imageAlergeno cuando alergenoActive cambie
+  useEffect(() => {
+    if (alergenoActive && alergenoActive.imagen) {
+      setImageAlergeno(alergenoActive.imagen); // Actualizamos el estado local con la imagen del alergeno
+    } else {
+      setImageAlergeno(null); // Si no hay imagen en alergenoActive, reseteamos el estado local
+    }
+  }, [alergenoActive]); // Solo se ejecuta cuando `alergenoActive` cambia
 
   const handleClose = () => {
-    dispatch(removeAlergenoActive())
     setIsOpenModal(false)
+    dispatch(removeAlergenoActive())
   }
 
   return (
@@ -96,11 +106,11 @@ export const ModalCrearAlergeno = ({ getAlergenos, isOpenModal, setIsOpenModal }
 
                       <div className={styles.containerAgregarimagen}>
                         <UploadImage
-                          elementActive={alergenoActive as IAlergenos}
-                          imageObjeto={imageAlergeno}
-                          setImageObjeto={setImageAlergeno}
-                          typeElement="alergenos"
+                        imageObjeto={imageAlergeno}
+                        setImageObjeto={setImageAlergeno}
+                        typeElement='alergenos'
                         />
+                        
                       </div>
                     </div>
                     <div className={styles.containerBotonesFormModal}>
