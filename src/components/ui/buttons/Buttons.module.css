@@ -1,0 +1,11 @@
+.button{
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 35px;
+    max-height: 35px;
+    background-color: transparent;
+    border-radius: 5px;
+}

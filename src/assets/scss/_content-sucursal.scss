@@ -1,0 +1,47 @@
+/* Cambiar el color del dropdown */
+.dropdown-menu {
+    background-color: #222222 !important; // Fondo rojo para el menu
+    border: none; // Borde rojo para el menu
+    color: white !important; // Asegurarse de que el texto sea blanco
+    width: 300px !important;
+}
+
+/* Cambiar el color de los elementos dentro del dropdown */
+.dropdown-item {
+    color: white !important; // Texto blanco en los items
+}
+
+/* Cambiar el color de los items activos del dropdown */
+.dropdown-item.active,
+.dropdown-item:active {
+    background-color: #464646 !important; // Color más oscuro para el item activo
+    color: white !important; // Texto blanco
+}
+
+/* Cambiar el color de los items cuando el mouse pasa sobre ellos */
+.dropdown-item:hover {
+    background-color: #006284 !important; // Color más oscuro para el hover
+    color: white !important; // Texto blanco
+}
+
+
+/* Cambiar el fondo del DropdownButton (el botón que abre el dropdown) */
+.btn.dropdown-toggle {
+    background-color: #006284 !important; // Fondo rojo para el botón
+    border-color: #006284 !important; // Borde rojo para el botón
+    color: white !important; // Color de texto blanco para el botón
+    width: 300px !important; // Establece el ancho del botón a 200px
+    justify-content: space-around !important;
+}
+
+/* Cambiar el fondo del DropdownButton cuando está activo (cuando el dropdown está abierto) */
+.btn.dropdown-toggle:focus,
+.btn.dropdown-toggle:active {
+    border: 2px solid;
+    border-color: white !important; // Borde más oscuro para el botón
+    color: white !important; // Mantener el color de texto blanco
+}
+/* Cambiar el color del icono (la flecha) en el DropdownButton */
+.btn.dropdown-toggle::after {
+    border-top-color: white !important; // Cambiar el color de la flecha (ícono) a blanco
+}
