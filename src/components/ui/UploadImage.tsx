@@ -1,14 +1,10 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { Button } from "@mui/material";
 import Swal from "sweetalert2";
 import noImage from "../../assets/images/noImage.jpeg"
 import { IImagen } from "../../types/IImagen";
 import { ImageService } from "../../services/ImagenService";
 import { IAlergenos } from "../../types/dtos/alergenos/IAlergenos";
-import { IProductos } from "../../types/dtos/productos/IProductos";
-import { ICategorias } from "../../types/dtos/categorias/ICategorias";
-import { ISucursal } from "../../types/dtos/sucursal/ISucursal";
-import { IEmpresa } from "../../types/dtos/empresa/IEmpresa";
 
 // Definimos la interfaz de las propiedades que recibirá el componente UploadImage
 interface IUploadImage {
@@ -80,11 +76,10 @@ export const UploadImage: FC<IUploadImage> = ({
   const handleDeleteImagen = async () => {
     // Si existe un objeto de imagen y la función para actualizarlo
     if (imageObjeto && setImageObjeto && elementActive && typeElement) {
-      console.log('elemento activo id: ', elementActive.id)
-      if (elementActive as IAlergenos) console.log('imagen del elemento activo: ', imageObjeto)
       await imageService
         .deleteImgItems(elementActive?.id, imageObjeto.url, typeElement)
         .then(() => {
+          console.log('imagen eliminada')
           setImageObjeto(null); // Eliminamos el objeto de imagen
         });
     }
@@ -95,6 +90,12 @@ export const UploadImage: FC<IUploadImage> = ({
       });
     }
   };
+
+  useEffect(() => {
+    console.log("Estado de imageObjeto actualizado:", imageObjeto);
+  }, [imageObjeto]);
+
+  console.log('estado imagen: ', imageObjeto)
 
   return (
     <div

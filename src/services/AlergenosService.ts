@@ -39,13 +39,7 @@ export class AlergenosService extends BackendClient<IAlergenos | ICreateAlergeno
   }
 
   async put(id: number, data: IUpdateAlergeno): Promise<IUpdateAlergeno> {
-    Swal.fire({
-      title: "Editando datos...",
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-    });
+    
     try {
       const response = await fetch(`${this.baseUrl}/${id}`, {
         method: "PUT",
@@ -60,7 +54,6 @@ export class AlergenosService extends BackendClient<IAlergenos | ICreateAlergeno
       const newData = await response.json();
       return newData as IUpdateAlergeno;
     } finally {
-      Swal.close();
     }
   }
 

@@ -21,6 +21,7 @@ import { IProductos } from '../../../../../types/dtos/productos/IProductos';
 import { ProductosService } from '../../../../../services/ProductosService';
 import { UploadImage } from '../../../UploadImage';
 import Select from "react-select"
+import { SucursalService } from '../../../../../services/SucursalService';
 
 
 interface IModalCrearProductos {
@@ -33,7 +34,6 @@ export const ModalCrearProducto: FC<IModalCrearProductos> = ({ isOpenModal, setO
     const [imagen, setImagen] = useState<IImagen | null>(null);
     const [selectedAlergeno, setSelectedAlergeno] = useState("Sin alergenos");
     const [selectedCategoria, setSelectedCategoria] = useState("Sin categoria");
-
     const [alergeno, setAlergeno] = useState<IAlergenos[]>([])
     const [categorias, setCategorias] = useState<ICategorias[]>([]);
 
@@ -54,7 +54,8 @@ export const ModalCrearProducto: FC<IModalCrearProductos> = ({ isOpenModal, setO
 
     const API_URL = import.meta.env.VITE_API_URL
 
-    const categoriasData = useAppSelector((state) => state.categoriaReducer.dataCategorias);
+    const sucursalActive = useAppSelector( (state) => state.sucursalReducer.sucursalActive)
+
     const categoriasServices = new CategoriasServices(API_URL + "/categorias");
 
     const alergenoServices = new AlergenosService(API_URL + "/alergenos")
@@ -65,8 +66,11 @@ export const ModalCrearProducto: FC<IModalCrearProductos> = ({ isOpenModal, setO
             setAlergeno(alergenoData);
         });
     };
+
+    const categoriasData = useAppSelector((state) => state.categoriaReducer.dataCategorias);
+    
     const getCategorias = async () => {
-        await categoriasServices.getAll().then((categoriasData) => {
+        await categoriasServices.getSubcategoriasBySucursal(sucursalActive?.id as number).then((categoriasData) => {
             dispatch(setDataCategorias(categoriasData));
             setCategorias(categoriasData);
         });
@@ -75,6 +79,8 @@ export const ModalCrearProducto: FC<IModalCrearProductos> = ({ isOpenModal, setO
     useEffect(() => {
         getCategorias()
     }, [])
+
+    console.log('categorias data: ', categoriasData)
 
     const handelCategoriaActive = (categoria: ICategorias) => {
         dispatch(setCategoriaActive({ element: categoria }))
@@ -86,14 +92,6 @@ export const ModalCrearProducto: FC<IModalCrearProductos> = ({ isOpenModal, setO
         setOpenModal(false);
         dispatch(removeProductoActive())
     }
-
-    useEffect(() => {
-        if (productoActive && productoActive.imagenes) {
-            setImagen(productoActive.imagenes[0])
-        } else {
-            setImagen(null);
-        }
-    }, [productoActive]);
 
     return (
 
@@ -133,7 +131,7 @@ export const ModalCrearProducto: FC<IModalCrearProductos> = ({ isOpenModal, setO
                     enableReinitialize={true}
                     onSubmit={async (values: ICreateProducto | IUpdateProducto, { resetForm }) => {
 
-                        if (imagen) values.imagenes.push(imagen as IImagen);
+                        // if (imagen) values.imagenes.push(imagen as IImagen);
 
                         const productosServices = new ProductosService(API_URL + "/articulos");
 
@@ -148,9 +146,9 @@ export const ModalCrearProducto: FC<IModalCrearProductos> = ({ isOpenModal, setO
                                 descripcion: values.descripcion,
                                 idCategoria: values.idCategoria,
                                 idAlergenos: values.idAlergenos,
-                                imagenes: values.imagenes,
+                                imagenes: imagen?.url ? [imagen] : [],
                             };
-
+                            
                             await productosServices.put(productoActive.id, updateValues);
                         } else {
 
@@ -162,7 +160,7 @@ export const ModalCrearProducto: FC<IModalCrearProductos> = ({ isOpenModal, setO
                                 codigo: values.codigo,
                                 idCategoria: values.idCategoria,
                                 idAlergenos: values.idAlergenos,
-                                imagenes: values.imagenes,
+                                imagenes: imagen ? [imagen] : [],
                             };
 
                             await productosServices.post(createValues);
@@ -211,40 +209,28 @@ export const ModalCrearProducto: FC<IModalCrearProductos> = ({ isOpenModal, setO
                                             )}
                                         </div>
 
-
-
-                                        {/* <DropdownButton
-                                                id="alergenos"
-                                                title={productoActive ? productoActive.alergenos[0].denominacion : selectedAlergeno || 'Sin Alergeno' }
-                                                menuVariant="dark"
-                                            >
-                                                {alergenoData.map((alergeno, index) => (
-                                                    <Dropdown.Item
-                                                        key={index}
-                                                        as="button"
-                                                        onClick={(event) => {
-                                                            event.preventDefault();
-                                                            setFieldValue('idAlergenos', [...values.idAlergenos, alergeno.id]);
-                                                            handelAlergenoActive(alergeno);
-                                                            setSelectedAlergeno(alergeno.denominacion);
-                                                        }}
-                                                    >
-                                                        {alergeno.denominacion}
-                                                    </Dropdown.Item>
-                                                ))}
-                                            </DropdownButton>
-                                            {touched.idAlergenos && errors.idAlergenos && (
-                                                <div className="error">{errors.idAlergenos}</div>
-                                            )} */}
-
                                         <DropdownButton
                                             id="categoria"
                                             title={productoActive ? productoActive.categoria.denominacion : selectedCategoria || 'Sin Categoria'}
                                             className={styles.dropdowns}
                                             menuVariant="dark"
                                         >
-                                            {categoriasData
-                                                .filter(categoria => categoria.subCategorias && categoria.subCategorias.length > 0)
+                                            {categoriasData.map((subCategoria, index) => (
+                                                    <Dropdown.Item
+                                                        key={index}
+                                                        as="button"
+                                                        onClick={(event) => {
+                                                            event.preventDefault();
+                                                            setFieldValue('idCategoria', subCategoria.id);
+                                                            handelCategoriaActive(subCategoria);
+                                                            setSelectedCategoria(subCategoria.denominacion);
+                                                        }}
+                                                    >
+                                                        {subCategoria.denominacion}
+                                                    </Dropdown.Item>
+                                                ))
+
+                                                /*.filter(categoria => categoria.subCategorias && categoria.subCategorias.length > 0)
                                                 .flatMap(categoria => categoria.subCategorias)
                                                 .map((subCategoria, index) => (
                                                     <Dropdown.Item
@@ -259,7 +245,7 @@ export const ModalCrearProducto: FC<IModalCrearProductos> = ({ isOpenModal, setO
                                                     >
                                                         {subCategoria.denominacion}
                                                     </Dropdown.Item>
-                                                ))
+                                                ))*/
                                             }
                                         </DropdownButton>
 
@@ -322,27 +308,27 @@ export const ModalCrearProducto: FC<IModalCrearProductos> = ({ isOpenModal, setO
                             </div>
                             <div className={styles.containerImagen}>
                                 <div className={styles.containerAgregarimagen}>
-                                    {productoActive?.imagenes && productoActive.imagenes.length > 0 ? (
-                                        <Carousel>
-                                            {productoActive.imagenes.map((imagen, index) => (
-                                                <Carousel.Item key={index}>
-                                                    <UploadImage
-                                                    imageObjeto={imagen}
-                                                    setImageObjeto={setImagen}
-                                                    typeElement="articulos"
-                                                    />
-                                                </Carousel.Item>
-                                            ))}
-                                        </Carousel>
-                                    ) : (
-                                        <UploadImage
-                                        imageObjeto={imagen}
-                                        setImageObjeto={setImagen}
-                                        typeElement="articulos"
-                                        />
-                                    )}
+                                {productoActive?.imagenes && productoActive.imagenes.length > 0 ? (
+                                    <Carousel>
+                                        {productoActive.imagenes.map((imagen, index) => (
+                                            <Carousel.Item key={index}> 
+                                                <UploadImage
+                                                imageObjeto={imagen}
+                                                setImageObjeto={setImagen}
+                                                typeElement="articulos"
+                                                />
+                                            </Carousel.Item>    
+                                        ))}
+                                    </Carousel>
+                                ) : (
+                                    <UploadImage
+                                    imageObjeto={imagen}
+                                    setImageObjeto={setImagen}
+                                    typeElement="articulos"
+                                    />
+                                )}
+                                    
                                 </div>
-
                             </div>
 
                             <div className={styles.containerBotonesFormModal}>

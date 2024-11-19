@@ -11,6 +11,12 @@ export class ProductosService extends BackendClient<IProductos | ICreateProducto
         return data as IProductos[];
     }
 
+    async getProductosBySucursal(id: number): Promise<IProductos[]> {
+        const response = await fetch(`${this.baseUrl}/porSucursal/${id}`);
+        const data = await response.json();
+        return data as IProductos[];
+    }
+
     async post(newProducto: ICreateProducto): Promise<ICreateProducto> {
         const response = await fetch(`${this.baseUrl}/create`, {
             method: "POST",
@@ -36,6 +42,7 @@ export class ProductosService extends BackendClient<IProductos | ICreateProducto
             },
             body: JSON.stringify(data),
         });
+
         const newData = await response.json();
         return newData as IUpdateProducto;
     }

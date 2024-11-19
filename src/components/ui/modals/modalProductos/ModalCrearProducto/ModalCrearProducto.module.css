@@ -135,16 +135,17 @@
     margin-top: 10px;
 }
 .containerImagen{
-    width: 100%;
+    position:relative;
+    left: 18%;
+    width: 64%;
     display: flex!important;
     justify-content: center!important;
     align-items: center!important;
     justify-content: space-around!important;
-    
 }
 .containerAgregarimagen {
     background-color: #006284!important;
-    width: 339px!important;
+    width: 320px!important;
     height: 115px!important;
     display: flex!important;
     justify-content: center!important;
@@ -153,6 +154,8 @@
     border-radius: 0.4rem;
     margin-top: 20px;
 
+    display: flex;
+    justify-content: center;
 }
 .containerDescripcion textarea{
     border-radius: 0.4rem;

@@ -52,7 +52,7 @@ export class ImageService extends BackendClient<IImagen> {
     const regex =
       /https:\/\/res\.cloudinary\.com\/[\w\-]+\/image\/upload\/([\w\-]+)/;
     const publicId = url.match(regex);
-    console.log('public id: ', publicId)
+    // console.log('public id: ', publicId)
 
     // Muestra un mensaje de eliminación utilizando SweetAlert2
     Swal.fire({
@@ -76,8 +76,6 @@ export class ImageService extends BackendClient<IImagen> {
           method: "POST",
         }
       );
-      console.log(`${API_URL}/${pathDelete}/deleteImg?id=${idElement}&publicId=${publicId[1]}`)
-
       // Si la respuesta no es satisfactoria, lanza un error
       if (!response.ok) {
         throw new Error("Error al eliminar la imagen del servidor");
@@ -85,7 +83,6 @@ export class ImageService extends BackendClient<IImagen> {
     } finally {
       Swal.close(); // Cierra el mensaje de eliminación
     }
-    console.log(`${API_URL}/${pathDelete}/deleteImg?id=${idElement}&publicId=${publicId[1]}`)
   }
 
   // Método para eliminar una imagen de Cloudinary directamente

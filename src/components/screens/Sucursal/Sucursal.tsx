@@ -58,7 +58,7 @@ export const Sucursal = () => {
 
   // Función para obtener las personas
   const getProductos = async () => {
-    await productosService.getAll().then((productosData) => {
+    await productosService.getProductosBySucursal(sucursalActive?.id as number).then((productosData) => {
       dispatch(setDataProductos(productosData));
       setProductos(productosData);
     });
@@ -185,10 +185,9 @@ export const Sucursal = () => {
     navigate("/")
   }
 
-  alergenosData.map((alergeno)=>{
-    console.log(`alergeno: ${alergeno.id}, ${alergeno.denominacion}, ${alergeno.imagen.url}`)
-  })
-
+  // alergenosData.map((alergeno)=>{
+  //   console.log(`alergeno: ${alergeno.id}, ${alergeno.denominacion}, ${alergeno.imagen.url}`)
+  // })
 
   return (
     <>

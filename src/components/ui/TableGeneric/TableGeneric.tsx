@@ -79,14 +79,7 @@ export const TableGeneric = <T extends { id: any }>({
     });
   };
 
-  const getProductos = async () => {
-    await productosService.getAll().then((productosData) => {
-        dispatch(setDataProductos(productosData))
-    });
-  };
-
   const handleEdit = (row: IAlergenos | IProductos | ICategorias) => {
-    console.log(row)
     
     if (row as IProductos) {
       dispatch(setProductoActive({ element: row as IProductos }));

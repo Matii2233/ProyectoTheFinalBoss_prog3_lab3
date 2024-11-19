@@ -64,7 +64,7 @@ export const TarjetaSucursal = () => {
                         </div>
                         <div className={styles.contenedorBotonesTarjetaSucursal} style={{marginTop: "10px"}}>
                             <Buttons onClick={() => handleEditarSucursal(sucursal)} buttonColor={"0077FF"}><span className="material-symbols-outlined" style={{ scale: iconScale, display:"flex", alignItems:"center", justifyContent:"center"}}>edit</span></Buttons>
-                            <Link to={`/sucursal`}>
+                            <Link onClick={() => dispatch(setSucursalActive(sucursal))} to={`/sucursal`}>
                               <Buttons buttonColor={"00A419"}><span className="material-symbols-outlined" style={{ scale: iconScale, display:"flex", alignItems:"center", justifyContent:"center"}}>apartment</span></Buttons>
                             </Link>
                             <Buttons onClick={() => handleVerSucursal(sucursal)} buttonColor={"FC7600"}><span className="material-symbols-outlined" style={{ scale: iconScale, display:"flex", alignItems:"center", justifyContent:"center"}}>visibility</span></Buttons>
