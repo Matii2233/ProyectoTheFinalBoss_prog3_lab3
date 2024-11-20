@@ -1,4 +1,6 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage' // Usamos localStorage
 import EmpresaReducer from "./slices/EmpresaReducer"
 import SucursalReducer from "./slices/SucursalReducer"
 import PaisReducer from "./slices/PaisReducer"
