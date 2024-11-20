@@ -1,4 +1,3 @@
-import { create } from "@mui/material/styles/createTransitions";
 import { ICategorias } from "../../../types/dtos/categorias/ICategorias";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 

@@ -4,7 +4,7 @@ import { TableGeneric } from "../../ui/TableGeneric/TableGeneric"
 import styles from "./Sucursal.module.css"
 import { Button, Dropdown } from "react-bootstrap"
 import { IAlergenos } from "../../../types/dtos/alergenos/IAlergenos"
-import { useEffect, useState } from "react"
+import { Dispatch, useEffect, useState } from "react"
 import { AlergenosService } from "../../../services/AlergenosService"
 import { ModalCrearAlergeno } from "../../ui/modals/ModalCrearAlrgeno/ModalCrearAlergeno"
 import { setDataAlergeno } from "../../../redux/store/slices/AlergenoReducer"
@@ -16,39 +16,57 @@ import { ICategorias } from "../../../types/dtos/categorias/ICategorias"
 import { IProductos } from "../../../types/dtos/productos/IProductos"
 import { ModalCrearProducto } from "../../ui/modals/modalProductos/ModalCrearProducto/ModalCrearProducto"
 import { ModalVerProducto } from "../../ui/modals/modalProductos/ModalVerProducto/ModalVerProducto"
+import { ModalCrearCategoria } from "../../ui/modals/ModalCrearCategoria/ModalCrearCategoria"
+import { setDataCategorias } from "../../../redux/store/slices/CategoriasReducer"
+import { CategoriasServices } from "../../../services/CategoriasServices"
+import ModalCrearSubcategoria from "../../ui/modals/ModalCrearSubcategoria/ModalCrearSubcategoria"
 
 
 export const Sucursal = () => {
+
+  // ----- ESTADOS -----
+  // botones alergenos - categorias - productos
   const [isAlergenosOpen, setIsAlergenosOpen] = useState(false)
   const [isProductosOpen, setIsProductosOpen] = useState(false);
+  const [isCategoriasOpen, setIsCategoriasOpen] = useState(false)
+  // datos de alergenos, productos o categorias
   const [alergenos, setAlergeno] = useState<IAlergenos[]>()
   const [productos, setProductos] = useState<IProductos[]>([]);
   const [categorias, setCategorias] = useState<ICategorias[]>([]);
+  // categoriaElegida es para modal productos
   const [categoriaElegida, setCategoriaElegida] = useState<number | null>(null);
+  // selectedCategoria para modal categoria --- expandedCategoria para modal subcategria
+  const [selectedCategoria, setSelectedCategoria] = useState<number | null>(null)
+  const [expandedCategoriaId, setExpandedCategoriaId] = useState<number | null>(null);
+  //estado para traer los datos a los modals de edit categoria y edit subcategoria
+  const [categoriaActiva, setCategoriaActiva] = useState(null)
+  const [subcategoriaSeleccionada, setSubcategoriaSeleccionada] = useState(null);
+  // estados para abrir cada modal
   const [isOpenModalAlergeno, setIsOpenModalAlergeno] = useState(false)
   const [isOpenModalProducto, setIsOpenModalProducto] = useState(false)
   const [modalVerProducto, setModalVerProducto] = useState(false)
+  const [isOpenCategoriaModal, setIsOpenCategoriaModal] = useState(false)
+  const [isOpenSubcategoriaModal, setIsOpenSubcategoriaModal] = useState(false);
 
 
-
-  // Guardamos el useAppDispatch
   const dispatch = useAppDispatch()
-  // Guardamos la variable de entorno
   const API_URL = import.meta.env.VITE_API_URL;
 
+  // DATA ELEMENTOS
   const alergenosData = useAppSelector( (state) => state.alergenoReducer.dataAlergenos )
-
   const productosData = useAppSelector( (state) => state.productoReducer.dataProductos )
-  // Guardamos un objeto AlergenosService del service de alergenos
+  
+  // SERVICES
   const alergenosService = new AlergenosService(API_URL+"/alergenos")
-  // Guardamos un objeto AlergenosService del service de alergenos
   const productosService = new ProductosService(API_URL+"/articulos")
+  const categoriasService = new CategoriasServices(API_URL+"/categorias")
 
+  // ELEMENTOS ACTIVOS
   const empresaActive = useAppSelector( (state) => state.empresaReducer.empresaActive );
-
   const sucursalActive = useAppSelector( (state) => state.sucursalReducer.sucursalActive );
 
-  // Función para obtener los alergenos
+
+  // METODOS GET para alergenos, productos y categorias
   const getAlergenos = async () => {
     await alergenosService.getAll().then((alergenosData) => {
         dispatch(setDataAlergeno(alergenosData));
@@ -56,13 +74,31 @@ export const Sucursal = () => {
     });
   };
 
-  // Función para obtener las personas
   const getProductos = async () => {
     await productosService.getProductosBySucursal(sucursalActive?.id as number).then((productosData) => {
       dispatch(setDataProductos(productosData));
       setProductos(productosData);
     });
   };
+
+  const getCategorias = async () => {
+    if (!sucursalActive) {
+      alert("No hay una sucursal activa. Seleccione una sucursal primero.");
+      return;
+    }
+    try {
+      // Llama al endpoint para obtener las categorías padres por sucursal
+      const categoriasPadre =
+        await categoriasService.getCategoriasPadrePorSucursal(
+          sucursalActive.id
+        );
+      setCategorias(categoriasPadre); // Actualiza el estado local
+      dispatch(setDataCategorias(categoriasPadre)); // Actualiza el estado global
+    } catch (error) {
+      console.error("Error al obtener las categorías:", error);
+    }
+  };
+
 
   // Cargar todos los datos
   useEffect( ()=>{
@@ -72,7 +108,9 @@ export const Sucursal = () => {
   useEffect( ()=>{
     getProductos()
   },[] )
+  
 
+  // FUNCIONES DE ACCION / APLICACION DE ESTILOS
   const handleActiveAlergenosButtonStyle = () => {
     if(isAlergenosOpen) {
       return {
@@ -95,7 +133,59 @@ export const Sucursal = () => {
     }
   }
 
-  // Eliminar un alergeno
+  const handleActiveCategoriasButtonStyle = () => {
+    if(isCategoriasOpen) {
+      return {
+        transform: 'scale(1.05)',
+        fontWeight: '500',
+      }
+    } else {
+      return {}
+    }
+  }
+
+  const handleEditCategoria = (categoria) => {
+    setCategoriaActiva(categoria)
+    setIsOpenCategoriaModal(true)
+  }
+
+  const handleEditSubcategoria = (subcategoria) => {
+    setSubcategoriaSeleccionada(subcategoria);
+    setIsOpenSubcategoriaModal(true);
+  };
+
+  const toggleSubcategorias = async (categoriaId: number) => {
+    if (!sucursalActive) {
+      console.warn("No hay una sucursal activa");
+      return;
+    }
+    if (expandedCategoriaId === categoriaId) {
+      setExpandedCategoriaId(null); // Colapsa la categoría
+    } else {
+      try {
+        const subcategorias =
+          await categoriasService.getSubcategoriasPorCategoriaPadre(
+            categoriaId,
+            sucursalActive.id
+          );
+        setCategorias((prevCategorias) =>
+          prevCategorias.map((categoria) =>
+            categoria.id === categoriaId
+              ? { ...categoria, subCategorias: subcategorias }
+              : categoria
+          )
+        );
+        setExpandedCategoriaId(categoriaId); // Expande la categoría seleccionada
+      } catch (error) {
+        console.error("Error al obtener subcategorías:", error);
+      }
+    }
+  };
+
+  const handleCategoriaElegida = (categoria: number | null) => {
+    setCategoriaElegida(categoria);
+  };
+
   const handleDeleteAlergeno = async (id: number) => {
     try {
       await alergenosService.deleteById(id);
@@ -108,7 +198,6 @@ export const Sucursal = () => {
     }
   };
 
-  // Eliminar un producto
   const handleDeleteProducto = async (id: number) => {
     try {
       await productosService.delete(id);
@@ -121,9 +210,21 @@ export const Sucursal = () => {
     }
   };
 
-  const handleCategoriaElegida = (categoria: number | null) => {
-    setCategoriaElegida(categoria);
+  const handleDeleteCategoria = async (id: number) => {
+    try {
+      await categoriasService.deleteById(id);
+      const updatedCategorias = categorias?.filter(
+        (categoria) => categoria.id !== id
+      );
+      setCategorias(updatedCategorias);
+      dispatch(setDataCategorias(updatedCategorias || []));
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+
+  // CONSTRUCCION DE LAS COLUMNAS PARA LA TABLA
 
   const productosFiltrados = categoriaElegida
     ? productosData.filter((producto) => producto.categoria?.id === categoriaElegida)
@@ -134,13 +235,13 @@ export const Sucursal = () => {
       label: 'Nombre',
       key: 'denominacion',
     },
-    // {
-    //   label: 'id alergeno',
-    //   key: 'id',
-    //   render: (alergeno: IAlergenos) => {
-    //     return alergeno.id ? alergeno.id : 'no hay alergeno'
-    //   }
-    // },
+    /*{
+      label: 'id alergeno',
+      key: 'id',
+      render: (alergeno: IAlergenos) => {
+        return alergeno.id ? alergeno.id : 'no hay alergeno'
+      }
+    }*/
     {
       label: 'Acciones',
       key: 'acciones',
@@ -179,6 +280,74 @@ export const Sucursal = () => {
     },
   ];
 
+  const categoriasColumns = [
+    { label: "Nombre", key: "denominacion" },
+    /*{ label: "ID", key: "id" }*/
+    {
+      label: "Acciones",
+      key: "acciones",
+      render: (categoria: ICategorias) => {
+        const isExpanded = expandedCategoriaId === categoria.id;
+
+        return (
+          <div
+            style={{ display: "flex", flexDirection: "column", justifyContent:"space-between", gap: "10px" }}
+          >
+            <div style={{ display: "flex", gap: "10px", justifyContent:'center' }}>
+              <Buttons
+                onClick={() => handleEditCategoria(categoria)}
+                buttonColor="0077FF"
+              >
+                <span className="material-symbols-outlined">edit</span>
+              </Buttons>
+              <Buttons
+                onClick={() => toggleSubcategorias(categoria.id)}
+                buttonColor={isExpanded ? "FC7600" : "0077FF"}
+              >
+                <span className="material-symbols-outlined">
+                  {isExpanded ? "arrow_drop_up" : "arrow_drop_down"}
+                </span>
+              </Buttons>
+              <Buttons
+                onClick={() => {
+                  setSubcategoriaSeleccionada(null);
+                  setIsOpenSubcategoriaModal(true);
+                  setSelectedCategoria(categoria.id); // Guardamos el ID de la categoría seleccionada
+                }}
+                buttonColor="00A419"
+              >
+                <span className="material-symbols-outlined">add</span>
+              </Buttons>
+            </div>
+
+            {isExpanded && categoria.subCategorias && (
+              <ul style={{ listStyleType: "disc", marginLeft: "20px", width:'90%',  }}>
+                {categoria.subCategorias.map((subcategoria) => (
+                  <li key={subcategoria.id} style={{display:'flex', justifyContent:'center', alignItems:'center', gap:'10px'}}>
+                    <div style={{height:'50px', display:'flex', justifyContent:'space-around', alignItems:'center', }}>
+                      <div style={{width:'320px',}}>
+                        {subcategoria.denominacion}
+                      </div>
+                      <Buttons
+                        onClick={() => handleEditSubcategoria(subcategoria)}
+                        buttonColor="0077FF"
+                        style={{ marginLeft: "10px" }}
+                      >
+                        <span className="material-symbols-outlined">edit</span>
+                      </Buttons>
+                    </div>
+                    
+                  </li>
+                ))}
+                
+              </ul>
+            )}
+          </div>
+        );
+      },
+    },
+  ];
+
   // Metodo handle para volver al home 
   const navigate = useNavigate()
   const handleBackToHome = () => {
@@ -201,30 +370,54 @@ export const Sucursal = () => {
           <Button className={styles.agregarGenero} onClick={() => setIsOpenModalAlergeno(true)}>Agregar Alergeno</Button>
         ) || isProductosOpen && (
           <Button className={styles.agregarGenero} onClick={() => setIsOpenModalProducto(true)}>Agregar Producto</Button>
+        ) || isCategoriasOpen && (
+          <Button className={styles.agregarGenero} onClick={() => setIsOpenCategoriaModal(true)}>Agregar Categoría</Button>
         )}
       </nav>
 
       <div className={styles.sucursalCont}>
+
+        {/* ASIDE */}
         <div className={styles.aside}>
           <h2>Administracion</h2>
           <div className={styles.buttContainer}>
-            <Button className={styles.butt1}
+
+            {/* BOTON ABRIR TABLA ALERGENOS */}
+            <Button
             onClick={() => {
               setIsProductosOpen(false)
+              setIsCategoriasOpen(false)
               setIsAlergenosOpen(!isAlergenosOpen)
             }}
             style={handleActiveAlergenosButtonStyle()}
-            >Alergeno</Button>
+            >
+              Alergeno
+            </Button>
 
-            <Button className={styles.butt2}>Categorias</Button>
+            {/* BOTON ABRIR TABLA CATEGORIAS */}
+            <Button
+              onClick={() => {
+                setIsAlergenosOpen(false)
+                setIsProductosOpen(false)
+                setIsCategoriasOpen(!isCategoriasOpen);
+                if (!isCategoriasOpen) getCategorias(); // Solo llama a getCategorias si el modal se va a abrir
+              }}
+              style={handleActiveCategoriasButtonStyle()}
+            >
+              Categorias
+            </Button>
             
-            <Button className={styles.butt3}
+            {/* BOTON ABRIR TABLA PRODUCTOS */}
+            <Button
             onClick={() => {
               setIsAlergenosOpen(false)
+              setIsCategoriasOpen(false)
               setIsProductosOpen(!isProductosOpen)
             }}
             style={handleActiveProductosButtonStyle()}
-            >Productos</Button>
+            >
+              Productos
+            </Button>
           </div>
         </div>
 
@@ -264,6 +457,14 @@ export const Sucursal = () => {
               setModalVerProducto={setModalVerProducto}
               />
             </>
+          ) || isCategoriasOpen && (
+            <TableGeneric<ICategorias>
+                dataTable={categorias}
+                columns={categoriasColumns}
+                handleDelete={handleDeleteCategoria}
+                isOpenModal={isOpenCategoriaModal}
+                setOpenModal={setIsOpenCategoriaModal}
+              />
           )}
           
         {isOpenModalAlergeno && (
@@ -284,6 +485,23 @@ export const Sucursal = () => {
           setOpenModalVerProducto={setModalVerProducto}
           openModalVerProducto={modalVerProducto}
         />
+        ) || isOpenCategoriaModal && (
+          <ModalCrearCategoria
+            getCategorias={getCategorias}
+            isOpenModal={isOpenCategoriaModal}
+            setIsOpenModal={setIsOpenCategoriaModal} // Solo abre/cierra si recibe "categoria"
+            categoriaActive={categoriaActiva}
+          />
+        ) || isOpenSubcategoriaModal && (
+          <ModalCrearSubcategoria
+            isOpenModal={isOpenSubcategoriaModal}
+            setIsOpenModal={setIsOpenSubcategoriaModal}
+            categoriaPadreId={selectedCategoria}
+            getCategorias={getCategorias}
+            setCategorias={setCategorias} // Pasar correctamente setCategorias como prop
+            subcategoriaSeleccionada={subcategoriaSeleccionada}
+            empresaActiva={empresaActive}
+          />
         )}
         </div>
       </div>
