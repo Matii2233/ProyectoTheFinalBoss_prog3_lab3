@@ -1,0 +1,181 @@
+.modalHeader {
+    background-color: #08192D !important;
+    color: white !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-bottom: none !important;
+    position: relative !important;
+}
+
+.modalHeader::after {
+    content: '' !important;
+    display: block !important;
+    height: 2px;
+    /* Grosor de la línea */
+    background-color: white !important;
+    /* Color de la línea */
+    width: 80% !important;
+    /* Largo de la línea (ajusta según necesites) */
+    position: absolute !important;
+    left: 50% !important;
+    /* Centrar la línea */
+    bottom: 0 !important;
+    /* Posición en la parte inferior del header */
+    transform: translateX(-50%) !important;
+    /* Centrar horizontalmente */
+}
+
+.modalBody {
+    background-color: #08192D !important;
+    color: white !important;
+    padding: 25px !important;
+    flex-direction: column;
+}
+
+.modalBody img {
+    max-width: 150px !important;
+    max-height: 150px !important;
+}
+
+.modalFooter {
+    background-color: #08192D !important;
+    color: white !important;
+    border-top: none !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.modalFooter button {
+    color: white !important;
+    background-color: transparent !important;
+    border: 1px solid white !important;
+    border-radius: 5px !important;
+    font-size: 20px !important;
+    padding: 0px 20px 0px 20px !important;
+    transition: transform 0.3s ease !important;
+    display: inline-block !important;
+}
+
+.modalFooter button:hover {
+    transform: scale(1.1) !important;
+}
+
+.containerPrecioVenta {
+    color: white;
+
+
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+}
+/* BUTTONS */
+.containerButtons {                  
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 40px
+}
+.buttonModalCancelar{
+    background-color: rgb(200, 0, 0)!important;
+    border: none!important;
+    color: white!important;
+    transition: all 0.3s!important;
+}
+.buttonModalCancelar:hover{ 
+    background-color: rgb(200, 0, 0)!important;
+    transform: scale(1.1)!important;
+    border: 1px solid white!important;
+}
+.buttonModalConfirmar{
+    background-color: rgb(0,200,0)!important;
+    border: none!important;
+    color: white!important;
+    transition: all 0.3s!important;
+}
+.buttonModalConfirmar:hover{ 
+    background-color: rgb(0,200,0)!important;
+    transform: scale(1.1)!important;
+    border: 1px solid white!important;
+}
+
+.containerFormModal{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    align-items: start;
+    gap:2vh;
+
+}
+
+.containerFormModal TextFieldValue {
+    width: 30%;
+}
+
+.containerFormModalIzquierda{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.containerSelect {
+    background-color: #08192D;
+    width: 75%;
+    margin-left: 45px;
+}
+.containerCheckBox{
+    display: flex!important;
+    flex-direction: row!important;
+    justify-content: center!important;
+    font-size: 15px;
+    gap: 20px;
+    margin-top: 10px;
+}
+.containerImagen{
+    position:relative;
+    left: 18%;
+    width: 64%;
+    display: flex!important;
+    justify-content: center!important;
+    align-items: center!important;
+    justify-content: space-around!important;
+}
+.containerAgregarimagen {
+    background-color: #006284!important;
+    width: 320px!important;
+    height: 115px!important;
+    display: flex!important;
+    justify-content: center!important;
+    align-items: center!important;
+    justify-content: space-around!important;
+    border-radius: 0.4rem;
+    margin-top: 20px;
+
+    display: flex;
+    justify-content: center;
+}
+.containerDescripcion textarea{
+    border-radius: 0.4rem;
+}
+.containerDescripcion textarea::placeholder {
+    color: rgb(255, 254, 254);
+    
+}
+.containerDropdowns {
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    color: black;
+    
+    
+}
+.containerBotonesFormModal{
+    display: flex!important;
+    flex-direction: row!important;
+    justify-content: space-around!important;
+}
