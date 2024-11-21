@@ -463,6 +463,8 @@ export const Sucursal = () => {
     setIsOpenCategoriaModal(true); // Abre el modal para creación
   };
 
+  console.log('id categoria padre: ', categoriaElegida)
+
   return (
     <>
       <nav className={styles.navbar}>

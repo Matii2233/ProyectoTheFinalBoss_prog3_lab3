@@ -121,6 +121,8 @@ const ModalCrearSubcategoria = ({
     }
   };
 
+  console.log('id categoria padre: ', categoriaPadreId)
+
   return (
     <Modal show={isOpenModal} onHide={handleClose}>
       <Modal.Header closeButton className="modal-header">
