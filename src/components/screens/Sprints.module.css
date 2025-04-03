@@ -1,0 +1,123 @@
+/* CONTENEDOR PRINCIPAL DE SPRINTS */
+
+.sprintsContainer {
+    height: 80vh;
+    padding: 20px 50px 30px 50px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4vh;
+}
+
+
+
+
+/* HEADER DE LOS SSPRINTS */
+
+.headerSprints {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2vh;
+}
+
+.headerTitle {
+    font-size: 26px;
+    color: #27446E;
+    font-weight: 800;
+}
+
+.crearTareaContainer {
+    padding-left: 20px;
+
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2vw;
+}
+
+.crearTareaContainer button {
+    padding: 8px 6px 8px 12px;
+    border-radius: 16px;
+    font-weight: 700;
+    background-color: #27446E;
+    color: rgb(238, 238, 238);
+    box-shadow: 3px 3px 7px rgb(61, 61, 61);
+    border-style: none;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+
+
+
+
+/* BODY DE LOS SSPRINTS */
+
+.bodySprints {
+    height: 100%;
+    width: 100%;
+    padding: 0% 5% 0% 5%;
+    box-sizing: border-box;
+
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    justify-content: center;
+    gap: 4%;
+}
+
+.column {
+    width: 100%;
+    height: 96%;
+    background-color: #27446E;
+    color: rgb(238, 238, 238);
+    border-radius: 16px;
+}
+
+.topOfColumn {
+    height: 8%;
+
+    display: flex;
+    justify-content: center;
+}
+
+.topOfColumn h3 {
+    width: 80%;
+    font-size: 17px;
+    border-bottom: 2px solid #3c6294;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.columnBodyContainer {
+    width: 100%;
+    height: 92%;
+    padding: 8% 8% 8% 8%;
+    box-sizing: border-box;
+}
+
+.columnBody {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    overflow-y: auto;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    display: flex;
+    flex-direction: column;
+    gap: 3%;
+}
+
+.columnBody::-webkit-scrollbar {
+    width: 0%;
+    background: transparent; /* Elimina la caja de fondo alrededor de la barra de scroll */
+}
